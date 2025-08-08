@@ -22,11 +22,11 @@ make help
 
 ### Métodos Alternativos
 ```bash
-# Scripts bash (legados)
+# Script bash (legado)
 ./scripts/executar.sh
 
 # Execução manual
-java -cp build br.ifpb.diagnosticos.sistema.SistemaExamesMedicos
+./scripts/compilar.sh && java -cp build br.ifpb.diagnosticos.sistema.SistemaExamesMedicos
 ```
 
 ## 📦 Arquitetura por Domínio de Negócio
@@ -274,7 +274,6 @@ public class JSON implements FormatoLaudo {
 - **🔧 Configurações**: Sistema completo de properties
 - **📊 CSV**: Carregamento de pacientes e médicos
 - **🛠️ Build**: Makefile com 11 comandos
-- **📚 Documentação**: 8 arquivos de documentação
 
 ## 🎯 Exemplos de Saída
 
