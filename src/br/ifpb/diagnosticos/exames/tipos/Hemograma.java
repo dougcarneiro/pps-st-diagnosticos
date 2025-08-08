@@ -1,0 +1,26 @@
+package br.ifpb.diagnosticos.exames.tipos;
+
+import br.ifpb.diagnosticos.exames.Exame;
+import br.ifpb.diagnosticos.modelo.Paciente;
+
+/**
+ * Implementação concreta de exame de Hemograma
+ */
+public class Hemograma extends Exame {
+    
+    public Hemograma(Paciente paciente, double valor) {
+        super(paciente, valor);
+    }
+    
+    @Override
+    protected void prepararPaciente() {
+        System.out.println("Preparando paciente para coleta de sangue - Hemograma");
+        System.out.println("Orientações: Jejum de 12 horas");
+    }
+    
+    @Override
+    protected void realizarProcedimento() {
+        System.out.println("Coletando amostra de sangue para hemograma");
+        System.out.println("Analisando contagem de células sanguíneas");
+    }
+}
