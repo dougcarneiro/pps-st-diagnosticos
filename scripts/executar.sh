@@ -23,20 +23,26 @@ cd src
 
 echo "🔨 Compilando o sistema com packages organizados..."
 
-# Compilar recursivamente todos os arquivos Java
+# Criar diretório para arquivos compilados
+mkdir -p ../build
+
+# Compilar recursivamente todos os arquivos Java para pasta build
 find . -name "*.java" -print > sources.txt
-javac -cp . @sources.txt
+javac -d ../build -cp ../build @sources.txt
 
 if [ $? -eq 0 ]; then
     echo "✅ Compilação bem-sucedida!"
+    echo "📁 Arquivos .class criados em: build/"
     echo ""
     echo "🚀 Executando demonstração do sistema..."
     echo "========================================"
     echo ""
-    # Executar a classe principal com package
+    # Executar a classe principal com package a partir da pasta build
+    cd ../build
     java br.ifpb.diagnosticos.sistema.SistemaExamesMedicos
     
     # Limpar arquivo temporário
+    cd ../src
     rm -f sources.txt
 else
     echo "❌ Erro na compilação!"

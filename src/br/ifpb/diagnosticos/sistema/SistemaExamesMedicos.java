@@ -1,6 +1,7 @@
 package br.ifpb.diagnosticos.sistema;
 
 import br.ifpb.diagnosticos.modelo.Paciente;
+import br.ifpb.diagnosticos.modelo.Medico;
 import br.ifpb.diagnosticos.modelo.Prioridade;
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.financeiro.*;
@@ -24,11 +25,19 @@ public class SistemaExamesMedicos {
         System.out.println("0. CARREGAMENTO DE DADOS");
         System.out.println("========================");
         
-        // Criar arquivo de exemplo se não existir
-        CarregadorCSV.criarArquivoExemplo("pacientes.csv");
+        // Criar arquivos de exemplo se não existirem
+        CarregadorCSV.criarArquivoExemploPacientes("dados/pacientes.csv");
+        CarregadorCSV.criarArquivoExemploMedicos("dados/medicos.csv");
         
-        // Carregar pacientes do arquivo CSV
-        List<Paciente> pacientesCarregados = CarregadorCSV.carregarPacientes("pacientes.csv");
+        // Carregar dados dos arquivos CSV
+        List<Paciente> pacientesCarregados = CarregadorCSV.carregarPacientes("dados/pacientes.csv");
+        List<Medico> medicosCarregados = CarregadorCSV.carregarMedicos("dados/medicos.csv");
+        
+        // Exibir médicos carregados
+        System.out.println("\nMédicos disponíveis:");
+        for (Medico medico : medicosCarregados) {
+            System.out.println("- " + medico);
+        }
         
         // Usar pacientes carregados + alguns criados manualmente
         Paciente paciente1 = pacientesCarregados.size() > 0 ? pacientesCarregados.get(0) 
