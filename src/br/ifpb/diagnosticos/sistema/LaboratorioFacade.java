@@ -134,9 +134,7 @@ public class LaboratorioFacade {
         }
     }
     
-    public String gerarLaudo(Exame exame, String formato, Map<String, Object> dados) {
-        // Configurar dados do exame
-        exame.setDados(dados);
+    public String gerarLaudo(Exame exame, String formato) {
         
         // Escolher formato
         FormatoLaudo formatoLaudo;
@@ -184,7 +182,7 @@ public class LaboratorioFacade {
         laudo.configurarValidacao(validador);
         
         // Validar dados antes de gerar laudo
-        if (validador != null && !validador.validar(dados)) {
+        if (validador != null && !validador.validar(exame.getDados())) {
             return "Erro na validação dos dados do exame";
         }
         

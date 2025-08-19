@@ -3,6 +3,8 @@ package br.ifpb.diagnosticos.exames;
 import br.ifpb.diagnosticos.modelo.Paciente;
 import br.ifpb.diagnosticos.financeiro.DescontoStrategy;
 import br.ifpb.diagnosticos.utils.GeradorNumeroExame;
+
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +15,7 @@ public abstract class Exame {
     protected DescontoStrategy descontoStrategy;
     protected double valor;
     protected Paciente paciente;
-    protected Map<String, Object> dados;
+    protected Map<String, Object> dados = new HashMap<>();
     
     public Exame(Paciente paciente, double valor) {
         this.paciente = paciente;

@@ -10,6 +10,10 @@ public class Ultrassonografia extends Exame {
     
     public Ultrassonografia(Paciente paciente, double valor) {
         super(paciente, valor);
+        this.dados.put("orgao", "Abdomen total");
+        this.dados.put("achados", "Fígado de dimensões normais");
+        this.dados.put("ecogenicidade", "Homogênea");
+        this.dados.put("medidas", "15,2 x 8,1 cm");
     }
     
     @Override

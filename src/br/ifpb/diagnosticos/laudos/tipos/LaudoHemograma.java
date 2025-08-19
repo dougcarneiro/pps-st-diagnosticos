@@ -73,39 +73,7 @@ public class LaudoHemograma extends Laudo {
                 dados.append("\n");
                 dadosExame.remove("leucocitos");
             }
-
-            // Análise de Glicose (indicador adicional - formato antigo, manter para compatibilidade)
-            if (dadosExame.containsKey("glicose")) {
-                dados.append("=== GLICOSE ===\n");
-                dados.append("Valor: ").append(dadosExame.get("glicose"))
-                     .append(" ").append(dadosExame.get("glicose_unidade")).append("\n");
-                dados.append("Referência: ").append(dadosExame.get("glicose_referencia")).append("\n");
-                dados.append("Status: ").append(dadosExame.get("glicose_status")).append("\n\n");
-            }
-            
-            // Análise de Colesterol (indicador adicional)
-            if (dadosExame.containsKey("colesterol_total")) {
-                dados.append("=== COLESTEROL ===\n");
-                dados.append("Colesterol Total: ").append(dadosExame.get("colesterol_total"))
-                     .append(" ").append(dadosExame.get("colesterol_unidade")).append("\n");
-                dados.append("LDL: ").append(dadosExame.get("colesterol_ldl"))
-                     .append(" ").append(dadosExame.get("colesterol_unidade")).append("\n");
-                dados.append("HDL: ").append(dadosExame.get("colesterol_hdl"))
-                     .append(" ").append(dadosExame.get("colesterol_unidade")).append("\n");
-                dados.append("Referência: ").append(dadosExame.get("colesterol_referencia")).append("\n");
-                dados.append("Status: ").append(dadosExame.get("colesterol_status")).append("\n\n");
-            }
-            
-            // Análise de Creatinina (indicador adicional)
-            if (dadosExame.containsKey("creatinina")) {
-                dados.append("=== CREATININA ===\n");
-                dados.append("Valor: ").append(dadosExame.get("creatinina"))
-                     .append(" ").append(dadosExame.get("creatinina_unidade")).append("\n");
-                dados.append("Referência: ").append(dadosExame.get("creatinina_referencia")).append("\n");
-                dados.append("Status: ").append(dadosExame.get("creatinina_status")).append("\n\n");
-            }
         }
-        
-        return dados.toString();
+        return super.gerarDadosExame(dados);
     }
 }

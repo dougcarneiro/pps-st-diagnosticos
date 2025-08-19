@@ -111,57 +111,65 @@ public class SistemaExamesMedicos {
         
         // Gerar laudos com diferentes formatos
         System.out.println("\n--- Laudo de Hemograma (PDF) ---");
-        Map<String, Object> dadosHemograma = new HashMap<>();
-        dadosHemograma.put("hemoglobina", 14.5);
-        dadosHemograma.put("hematocritos", 42.0);
-        dadosHemograma.put("leucocitos", 7500);
-        
-        String laudoHemograma = laboratorio.gerarLaudo(exame1, "PDF", dadosHemograma);
+        String laudoHemograma = laboratorio.gerarLaudo(exame1, "PDF");
         System.out.println(laudoHemograma);
         
         System.out.println("\n--- Laudo de Ressonância (HTML) ---");
-        Map<String, Object> dadosRessonancia = new HashMap<>();
-        dadosRessonancia.put("regiao", "Joelho direito");
-        dadosRessonancia.put("sequencias", "T1, T2, FLAIR");
-        dadosRessonancia.put("contraste", false);
-        dadosRessonancia.put("laudo_tecnico", "Estruturas ósseas preservadas");
-        dadosRessonancia.put("impressao", "Exame normal");
-        
-        String laudoRessonancia = laboratorio.gerarLaudo(exame2, "HTML", dadosRessonancia);
+        String laudoRessonancia = laboratorio.gerarLaudo(exame2, "HTML");
         System.out.println(laudoRessonancia);
         
         System.out.println("\n--- Laudo de Ultrassonografia (Texto) ---");
-        Map<String, Object> dadosUltrassom = new HashMap<>();
-        dadosUltrassom.put("orgao", "Abdomen total");
-        dadosUltrassom.put("achados", "Fígado de dimensões normais");
-        dadosUltrassom.put("ecogenicidade", "Homogênea");
-        dadosUltrassom.put("medidas", "15,2 x 8,1 cm");
-        
-        String laudoUltrassom = laboratorio.gerarLaudo(exame3, "TEXTO", dadosUltrassom);
+        String laudoUltrassom = laboratorio.gerarLaudo(exame3, "TEXTO");
         System.out.println(laudoUltrassom);
         
         System.out.println("\n--- Laudo de Exame Sanguíneo com Glicose (PDF) ---");
-        String laudoGlicose = laboratorio.gerarLaudo(exameGlicose, "PDF", exameGlicose.getDados());
+        String laudoGlicose = laboratorio.gerarLaudo(exameGlicose, "PDF");
         System.out.println(laudoGlicose);
         
         System.out.println("\n--- Laudo de Exame Sanguíneo com Múltiplos Indicadores (HTML) ---");
-        String laudoMultiplo = laboratorio.gerarLaudo(exameMultiplo1, "HTML", exameMultiplo1.getDados());
+        String laudoMultiplo = laboratorio.gerarLaudo(exameMultiplo1, "HTML");
         System.out.println(laudoMultiplo);
         
         System.out.println("\n--- Laudo de Exame Sanguíneo Completo (Texto) ---");
-        String laudoCompletoTxt = laboratorio.gerarLaudo(exameCompleto, "TEXTO", exameCompleto.getDados());
+        String laudoCompletoTxt = laboratorio.gerarLaudo(exameCompleto, "TEXTO");
         System.out.println(laudoCompletoTxt);
         
         System.out.println("\n5. DEMONSTRAÇÃO DE VALIDAÇÃO (Chain of Responsibility)");
         System.out.println("=======================================================");
         
-        // Testar validação com dados inválidos
+        // Testar validação com dados realmente inválidos
         Map<String, Object> dadosInvalidos = new HashMap<>();
-        dadosInvalidos.put("hemoglobina", 14.5); // Falta leucócitos
         
-        System.out.println("\n--- Tentativa de laudo com dados incompletos ---");
-        String laudoInvalido = laboratorio.gerarLaudo(exame1, "TEXTO", dadosInvalidos);
-        System.out.println(laudoInvalido);
+        System.out.println("\n--- Teste 1: Dados completamente vazios ---");
+        System.out.println("DADOS ORIGINAIS: " + exame1.getDados());
+        exame1.setDados(dadosInvalidos);
+        System.out.println("DADOS VAZIOS: " + exame1.getDados());
+        String laudoVazio = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laudoVazio);
+        
+        System.out.println("\n--- Teste 2: Dados com valores inválidos ---");
+        Map<String, Object> dadosGlicoseInvalida = new HashMap<>();
+        // Simular como seria um indicador de glicose real, mas com valor inválido
+        HashMap<String, Object> glicoseInvalida = new HashMap<>();
+        glicoseInvalida.put("valor", -50.0); // Valor negativo inválido
+        glicoseInvalida.put("unidade", "mg/dL");
+        dadosGlicoseInvalida.put("glicose", glicoseInvalida);
+        
+        exame1.setDados(dadosGlicoseInvalida);
+        System.out.println("DADOS COM GLICOSE INVÁLIDA: " + exame1.getDados());
+        String laudoGlicoseInvalida = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laudoGlicoseInvalida);
+        
+        System.out.println("\n--- Teste 3: Dados com colesterol inválido ---");
+        Map<String, Object> dadosColesterolInvalido = new HashMap<>();
+        HashMap<String, Object> colesterolInvalido = new HashMap<>();
+        colesterolInvalido.put("colesterol_total", 1000.0); // Valor muito alto inválido
+        dadosColesterolInvalido.put("colesterol", colesterolInvalido);
+        
+        exame1.setDados(dadosColesterolInvalido);
+        System.out.println("DADOS COM COLESTEROL INVÁLIDO: " + exame1.getDados());
+        String laudoColesterolInvalido = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laudoColesterolInvalido);
         
         System.out.println("\n6. DEMONSTRAÇÃO DE HISTÓRICO DE OBSERVAÇÕES (Memento Pattern)");
         System.out.println("==============================================================");

@@ -101,6 +101,60 @@ public abstract class Laudo {
     
     // Método abstrato - cada tipo de laudo implementa
     protected abstract String gerarDadosExame();
+
+    protected String gerarDadosExame(StringBuilder dados) {
+        for (Map.Entry<String, Object> entry : this.exame.getDados().entrySet()) {
+            String chave = entry.getKey();
+            Object valor = entry.getValue();
+
+            // Verificar se o valor é um Map (indicador estruturado)
+            if (valor instanceof Map) {
+                try {
+                    Map<String, Object> detalhes = (Map<String, Object>) valor;
+                    
+                    // Verificar se tem a estrutura esperada de um indicador
+                    if (detalhes.containsKey("valor")) {
+                        dados.append("=== ").append(chave.toUpperCase()).append(" ===\n");
+                        
+                        Object valorIndicador = detalhes.get("valor");
+                        if (valorIndicador instanceof Number) {
+                            // Formatar números com 2 casas decimais
+                            double valorNum = ((Number) valorIndicador).doubleValue();
+                            dados.append("Valor: ").append(String.format("%.2f", valorNum));
+                        } else {
+                            dados.append("Valor: ").append(valorIndicador);
+                        }
+                        
+                        // Adicionar unidade se disponível
+                        if (detalhes.containsKey("unidade")) {
+                            dados.append(" ").append(detalhes.get("unidade"));
+                        }
+                        dados.append("\n");
+                        
+                        // Adicionar referência se disponível
+                        if (detalhes.containsKey("referencia")) {
+                            dados.append("Referência: ").append(detalhes.get("referencia")).append("\n");
+                        }
+                        
+                        // Adicionar status se disponível
+                        if (detalhes.containsKey("status")) {
+                            dados.append("Status: ").append(detalhes.get("status")).append("\n");
+                        }
+                        
+                        dados.append("\n");
+                    }
+                } catch (ClassCastException e) {
+                    // Se não conseguir fazer cast para Map, ignorar silenciosamente
+                    System.err.println("Aviso: Não foi possível processar indicador: " + chave);
+                }
+            } else {
+                // Para dados simples (não estruturados), exibir diretamente
+                dados.append(chave).append(": ").append(valor).append("\n");
+            }
+        }
+        return dados.toString();
+    }
+
     
     // Getters e Setters
     public Observacao getObservacao() { return observacao; }
