@@ -66,9 +66,31 @@ public class SistemaExamesMedicos {
             null, 150.0
         );
         
-        Exame exame4 = laboratorio.solicitarExame(
+        // Outro exame para demonstrar fila
+        laboratorio.solicitarExame(
             paciente1, "RESSONANCIA", Prioridade.URGENTE, 
             new DescontoConvenio(), 800.0
+        );
+        
+        System.out.println("\n1.1. SOLICITAÇÃO DE EXAMES SANGUÍNEOS COM INDICADORES (Decorator Pattern)");
+        System.out.println("=========================================================================");
+        
+        // Exame com apenas um indicador - Glicose
+        Exame exameGlicose = laboratorio.solicitarExame(
+            paciente1, "HEMOGRAMA", Prioridade.ROTINA, 
+            new DescontoConvenio(), 60.0, new String[]{"GLICOSE"}
+        );
+        
+        // Exame com múltiplos indicadores - Colesterol + Creatinina
+        Exame exameMultiplo1 = laboratorio.solicitarExame(
+            paciente2, "HEMOGRAMA", Prioridade.POUCO_URGENTE, 
+            new DescontoIdoso(), 120.0, new String[]{"COLESTEROL", "CREATININA"}
+        );
+        
+        // Exame completo com todos os indicadores
+        Exame exameCompleto = laboratorio.solicitarExame(
+            paciente3, "HEMOGRAMA", Prioridade.URGENTE, 
+            null, 180.0, new String[]{"GLICOSE", "COLESTEROL", "CREATININA"}
         );
         
         System.out.println("\n2. FILA DE EXAMES (Priority Queue)");
@@ -118,6 +140,18 @@ public class SistemaExamesMedicos {
         String laudoUltrassom = laboratorio.gerarLaudo(exame3, "TEXTO", dadosUltrassom);
         System.out.println(laudoUltrassom);
         
+        System.out.println("\n--- Laudo de Exame Sanguíneo com Glicose (PDF) ---");
+        String laudoGlicose = laboratorio.gerarLaudo(exameGlicose, "PDF", exameGlicose.getDados());
+        System.out.println(laudoGlicose);
+        
+        System.out.println("\n--- Laudo de Exame Sanguíneo com Múltiplos Indicadores (HTML) ---");
+        String laudoMultiplo = laboratorio.gerarLaudo(exameMultiplo1, "HTML", exameMultiplo1.getDados());
+        System.out.println(laudoMultiplo);
+        
+        System.out.println("\n--- Laudo de Exame Sanguíneo Completo (Texto) ---");
+        String laudoCompletoTxt = laboratorio.gerarLaudo(exameCompleto, "TEXTO", exameCompleto.getDados());
+        System.out.println(laudoCompletoTxt);
+        
         System.out.println("\n5. DEMONSTRAÇÃO DE VALIDAÇÃO (Chain of Responsibility)");
         System.out.println("=======================================================");
         
@@ -129,7 +163,14 @@ public class SistemaExamesMedicos {
         String laudoInvalido = laboratorio.gerarLaudo(exame1, "TEXTO", dadosInvalidos);
         System.out.println(laudoInvalido);
         
-        System.out.println("\n6. DEMONSTRAÇÃO DE PADRÕES IMPLEMENTADOS");
+        System.out.println("\n6. DEMONSTRAÇÃO DE HISTÓRICO DE OBSERVAÇÕES (Memento Pattern)");
+        System.out.println("==============================================================");
+        
+        // Demonstrar o padrão Memento com histórico de observações
+        laboratorio.demonstrarHistoricoObservacoes();
+        
+        
+        System.out.println("\n8. DEMONSTRAÇÃO DE PADRÕES IMPLEMENTADOS");
         System.out.println("=========================================");
         System.out.println("✅ Singleton: GeradorNumeroExame");
         System.out.println("✅ Strategy: Descontos (Convênio 15%, Idoso 8%)");
@@ -141,8 +182,9 @@ public class SistemaExamesMedicos {
         System.out.println("✅ Memento: Histórico de Observações");
         System.out.println("✅ Facade: Interface Simplificada do Laboratório");
         System.out.println("✅ Priority Queue: Fila de Exames por Prioridade");
+        System.out.println("✅ Decorator: Indicadores em Exames Sanguíneos (Glicose, Colesterol, Creatinina)");
         
-        System.out.println("\n7. REQUISITOS FUNCIONAIS ATENDIDOS");
+        System.out.println("\n9. REQUISITOS FUNCIONAIS ATENDIDOS");
         System.out.println("===================================");
         System.out.println("✅ R1: Carregar dados de pacientes via CSV");
         System.out.println("✅ R2: Sistema de prioridades (Urgente > Pouco Urgente > Rotina)");

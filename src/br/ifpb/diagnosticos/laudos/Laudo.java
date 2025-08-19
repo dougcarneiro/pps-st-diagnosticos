@@ -7,6 +7,8 @@ import br.ifpb.diagnosticos.notificacao.Observador;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Classe abstrata para laudos (Bridge pattern)
@@ -95,6 +97,7 @@ public abstract class Laudo {
     protected String gerarRodape() {
         return "--- Fim do Laudo ---\n";
     }
+
     
     // Método abstrato - cada tipo de laudo implementa
     protected abstract String gerarDadosExame();
