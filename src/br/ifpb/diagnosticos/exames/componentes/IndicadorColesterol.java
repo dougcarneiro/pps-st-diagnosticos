@@ -32,12 +32,12 @@ public class IndicadorColesterol extends IndicadorExame {
     protected void adicionarDadosIndicador(Map<String, Object> dados) {
         if (dados != null) {
             HashMap<String, Object> colesterol = new HashMap<>();
-            colesterol.put("colesterol_total", valorColesterolTotal);
-            colesterol.put("colesterol_ldl", valorLDL);
-            colesterol.put("colesterol_hdl", valorHDL);
-            colesterol.put("colesterol_unidade", getUnidadeMedida());
-            colesterol.put("colesterol_referencia", getValorReferencia());
-            colesterol.put("colesterol_status", avaliarResultado());
+            colesterol.put("total", valorColesterolTotal);
+            colesterol.put("ldl", valorLDL);
+            colesterol.put("hdl", valorHDL);
+            colesterol.put("unidade", getUnidadeMedida());
+            colesterol.put("referencia", getValorReferencia());
+            colesterol.put("status", avaliarResultado());
             dados.put("colesterol", colesterol);
         }
     }
