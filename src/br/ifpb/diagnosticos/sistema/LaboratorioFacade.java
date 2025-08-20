@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 import br.ifpb.diagnosticos.exames.Exame;
-import br.ifpb.diagnosticos.exames.componentes.IndicadorColesterol;
-import br.ifpb.diagnosticos.exames.componentes.IndicadorCreatinina;
-import br.ifpb.diagnosticos.exames.componentes.IndicadorGlicemia;
+import br.ifpb.diagnosticos.exames.componentes.hemograma.IndicadorColesterol;
+import br.ifpb.diagnosticos.exames.componentes.hemograma.IndicadorCreatinina;
+import br.ifpb.diagnosticos.exames.componentes.hemograma.IndicadorGlicemia;
 import br.ifpb.diagnosticos.exames.criadores.CriadorExame;
 import br.ifpb.diagnosticos.exames.criadores.CriadorHemograma;
 import br.ifpb.diagnosticos.exames.criadores.CriadorRessonanciaMagnetica;
