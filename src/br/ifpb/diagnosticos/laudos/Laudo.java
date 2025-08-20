@@ -6,7 +6,6 @@ import br.ifpb.diagnosticos.validacao.Validador;
 import br.ifpb.diagnosticos.notificacao.Observador;
 import br.ifpb.diagnosticos.utils.FormatadorTexto;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -78,15 +77,35 @@ public abstract class Laudo {
     }
     
     protected String gerarCabecalho() {
-        return "=== LABORATÓRIO ST DIAGNÓSTICOS ===\n" +
-               "Data: " + new Date() + "\n" +
-               "Número do Exame: " + exame.getNumeroExame() + "\n\n";
+        StringBuilder cabecalho = new StringBuilder();
+        
+        // Cabeçalho do laboratório
+        cabecalho.append("=== LABORATÓRIO ST DIAGNÓSTICOS ===\n");
+        cabecalho.append("Laboratório de Análises Clínicas e Diagnóstico por Imagem\n");
+        
+        // Informações obrigatórias do laudo
+        cabecalho.append("IDENTIFICAÇÃO DO EXAME\n");
+        cabecalho.append("======================\n");
+        cabecalho.append("Número do Exame: ").append(exame.getNumeroExame()).append("\n");
+        cabecalho.append("Data de Implantação: ").append(exame.getDataImplantacao()).append("\n");
+        
+        // Médico solicitante (se disponível)
+        if (exame.getMedicoSolicitante() != null) {
+            cabecalho.append("Médico(a) Solicitante: ").append(exame.getMedicoSolicitante()).append("\n");
+        } else {
+            cabecalho.append("Médico(a) Solicitante: Não informado\n");
+        }
+        
+        cabecalho.append("\n");
+        
+        return cabecalho.toString();
     }
     
     protected String gerarDadosPaciente() {
         return "DADOS DO PACIENTE:\n" +
                "Nome: " + exame.getPaciente().getNome() + "\n" +
-               "Idade: " + exame.getPaciente().getIdade() + "\n" +
+               "CPF: " + exame.getPaciente().getCpf() + "\n" +
+               "Idade: " + exame.getPaciente().getIdade() + " anos\n" +
                "Convênio: " + exame.getPaciente().getConvenio() + "\n\n";
     }
     

@@ -27,6 +27,7 @@ import br.ifpb.diagnosticos.laudos.tipos.LaudoHemograma;
 import br.ifpb.diagnosticos.laudos.tipos.LaudoRessonanciaMagnetica;
 import br.ifpb.diagnosticos.laudos.tipos.LaudoUltrassonografia;
 import br.ifpb.diagnosticos.modelo.Paciente;
+import br.ifpb.diagnosticos.modelo.Medico;
 import br.ifpb.diagnosticos.modelo.Prioridade;
 import br.ifpb.diagnosticos.notificacao.EmailNotificador;
 import br.ifpb.diagnosticos.notificacao.SmsNotificador;
@@ -45,16 +46,60 @@ public class LaboratorioFacade {
     private FilaPrioridadeExames filaExames;
     private Map<String, CriadorExame> criadores;
     private List<Exame> examesProcessados; // Lista para armazenar exames processados
+    private List<Medico> medicosDisponiveis; // Lista de médicos disponíveis
     
     public LaboratorioFacade() {
         this.filaExames = new FilaPrioridadeExames();
         this.criadores = new HashMap<>();
         this.examesProcessados = new ArrayList<>();
+        this.medicosDisponiveis = new ArrayList<>();
         
         // Registrar criadores de exame
         criadores.put("HEMOGRAMA", new CriadorHemograma());
         criadores.put("ULTRASSONOGRAFIA", new CriadorUltrassonografia());
         criadores.put("RESSONANCIA", new CriadorRessonanciaMagnetica());
+    }
+    
+    /**
+     * Define a lista de médicos disponíveis no laboratório
+     */
+    public void setMedicosDisponiveis(List<Medico> medicos) {
+        this.medicosDisponiveis = medicos;
+    }
+    
+    /**
+     * Seleciona um médico baseado no tipo de exame
+     */
+    private Medico selecionarMedicoParaExame(String tipoExame) {
+        if (medicosDisponiveis.isEmpty()) {
+            return null;
+        }
+        
+        // Lógica para selecionar médico baseado no tipo de exame
+        for (Medico medico : medicosDisponiveis) {
+            switch (tipoExame.toUpperCase()) {
+                case "HEMOGRAMA":
+                    if (medico.getEspecialidade().contains("Hematologista") || 
+                        medico.getEspecialidade().contains("Clínico Geral")) {
+                        return medico;
+                    }
+                    break;
+                case "RESSONANCIA":
+                    if (medico.getEspecialidade().contains("Radiologista")) {
+                        return medico;
+                    }
+                    break;
+                case "ULTRASSONOGRAFIA":
+                    if (medico.getEspecialidade().contains("Ultrassonografista") ||
+                        medico.getEspecialidade().contains("Radiologista")) {
+                        return medico;
+                    }
+                    break;
+            }
+        }
+        
+        // Se não encontrar especialista, retorna o primeiro médico disponível
+        return medicosDisponiveis.get(0);
     }
     
     public Exame solicitarExame(Paciente paciente, String tipoExame, 
@@ -110,6 +155,13 @@ public class LaboratorioFacade {
             
             exame = criador.criarExame(paciente, valor);
             System.out.println("Exame " + tipoExame + " solicitado para " + paciente.getNome());
+        }
+        
+        // Associar médico solicitante
+        String tipoExameParaMedico = (indicadores != null && indicadores.length > 0) ? "HEMOGRAMA" : tipoExame;
+        Medico medicoSolicitante = selecionarMedicoParaExame(tipoExameParaMedico);
+        if (medicoSolicitante != null) {
+            exame.setMedicoSolicitante(medicoSolicitante);
         }
         
         // Aplicar desconto se fornecido

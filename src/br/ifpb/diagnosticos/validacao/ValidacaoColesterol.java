@@ -21,7 +21,6 @@ public class ValidacaoColesterol extends ValidadorBase {
                 System.out.println("❌ Erro: Dados de colesterol devem estar em formato HashMap");
                 return false;
             } else {
-                @SuppressWarnings("unchecked")
                 HashMap<String, Object> colesterolMap = (HashMap<String, Object>) colesterolObj;
                 if (!colesterolMap.containsKey("total")) {
                     System.out.println("❌ Erro: Valor de colesterol total não encontrado");

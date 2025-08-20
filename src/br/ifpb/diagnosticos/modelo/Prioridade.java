@@ -4,9 +4,11 @@ package br.ifpb.diagnosticos.modelo;
  * Enum para definir as prioridades dos exames
  */
 public enum Prioridade {
-    URGENTE(1),
-    POUCO_URGENTE(2),
-    ROTINA(3);
+    EMERGENCIA(1),
+    MUITO_URGENTE(2),
+    URGENTE(3),
+    POUCO_URGENTE(4),
+    ROTINA(5);
     
     private final int nivel;
     

@@ -39,6 +39,9 @@ public class SistemaExamesMedicos {
             System.out.println("- " + medico);
         }
         
+        // Configurar médicos no laboratório
+        laboratorio.setMedicosDisponiveis(medicosCarregados);
+        
         // Usar pacientes carregados + alguns criados manualmente
         Paciente paciente1 = pacientesCarregados.size() > 0 ? pacientesCarregados.get(0) 
                             : new Paciente("João Silva", "123.456.789-01", "Unimed", 45);

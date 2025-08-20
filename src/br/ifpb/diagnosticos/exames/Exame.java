@@ -1,12 +1,14 @@
 package br.ifpb.diagnosticos.exames;
 
 import br.ifpb.diagnosticos.modelo.Paciente;
+import br.ifpb.diagnosticos.modelo.Medico;
 import br.ifpb.diagnosticos.financeiro.DescontoStrategy;
 import br.ifpb.diagnosticos.utils.GeradorNumeroExame;
 import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Date;
 
 /**
  * Classe abstrata base para todos os exames (Template Method)
@@ -16,6 +18,8 @@ public abstract class Exame {
     protected DescontoStrategy descontoStrategy;
     protected double valor;
     protected Paciente paciente;
+    protected Medico medicoSolicitante;
+    protected Date dataImplantacao;
     protected Map<String, Object> dados = new HashMap<>();
     protected TipoExame tipoExame;
 
@@ -23,6 +27,7 @@ public abstract class Exame {
         this.paciente = paciente;
         this.valor = valor;
         this.codigo = GeradorNumeroExame.getInstance().gerarNumero();
+        this.dataImplantacao = new Date(); // Data de criação do exame
     }
     
     public void setDescontoStrategy(DescontoStrategy descontoStrategy) {
@@ -76,5 +81,17 @@ public abstract class Exame {
 
     public TipoExame getTipoExame() {
         return tipoExame;
+    }
+    
+    public Medico getMedicoSolicitante() {
+        return medicoSolicitante;
+    }
+    
+    public void setMedicoSolicitante(Medico medicoSolicitante) {
+        this.medicoSolicitante = medicoSolicitante;
+    }
+    
+    public Date getDataImplantacao() {
+        return dataImplantacao;
     }
 }
