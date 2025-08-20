@@ -2,7 +2,7 @@ package br.ifpb.diagnosticos.exames.componentes.hemograma;
 
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.exames.componentes.IndicadorExame;
-import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
+import br.ifpb.diagnosticos.enums.TipoExame;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,7 @@
 package br.ifpb.diagnosticos.validacao;
 
 import java.util.Map;
+import br.ifpb.diagnosticos.enums.TipoExame;
 
 /**
  * Classe base abstrata para validadores
@@ -8,12 +9,6 @@ import java.util.Map;
 public abstract class ValidadorBase implements Validador {
     protected Validador proximo;
     protected TipoExame tipoExame;
-
-    public enum TipoExame {
-        HEMOGRAMA,
-        ULTRASSONOGRAFIA,
-        RESSONANCIA,
-    }
 
     public ValidadorBase(TipoExame tipoExame) {
         this.tipoExame = tipoExame;

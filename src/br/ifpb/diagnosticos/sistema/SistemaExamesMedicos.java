@@ -2,7 +2,7 @@ package br.ifpb.diagnosticos.sistema;
 
 import br.ifpb.diagnosticos.modelo.Paciente;
 import br.ifpb.diagnosticos.modelo.Medico;
-import br.ifpb.diagnosticos.modelo.Prioridade;
+import br.ifpb.diagnosticos.enums.Prioridade;
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.financeiro.*;
 import br.ifpb.diagnosticos.utils.CarregadorCSV;

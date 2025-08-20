@@ -2,7 +2,7 @@ package br.ifpb.diagnosticos.exames.tipos;
 
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.modelo.Paciente;
-import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
+import br.ifpb.diagnosticos.enums.TipoExame;
 
 /**
  * Implementação concreta de exame de Ressonância Magnética

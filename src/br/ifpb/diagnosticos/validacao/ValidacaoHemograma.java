@@ -1,7 +1,7 @@
 package br.ifpb.diagnosticos.validacao;
 
-import java.util.HashMap;
 import java.util.Map;
+import br.ifpb.diagnosticos.enums.TipoExame;
 
 /**
  * Validação específica para exames sanguíneos com indicadores

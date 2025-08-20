@@ -28,7 +28,7 @@ import br.ifpb.diagnosticos.laudos.tipos.LaudoRessonanciaMagnetica;
 import br.ifpb.diagnosticos.laudos.tipos.LaudoUltrassonografia;
 import br.ifpb.diagnosticos.modelo.Paciente;
 import br.ifpb.diagnosticos.modelo.Medico;
-import br.ifpb.diagnosticos.modelo.Prioridade;
+import br.ifpb.diagnosticos.enums.Prioridade;
 import br.ifpb.diagnosticos.notificacao.EmailNotificador;
 import br.ifpb.diagnosticos.notificacao.SmsNotificador;
 import br.ifpb.diagnosticos.validacao.ValidacaoHemograma;

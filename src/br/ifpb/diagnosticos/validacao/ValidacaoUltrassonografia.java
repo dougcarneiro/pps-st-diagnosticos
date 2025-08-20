@@ -1,6 +1,7 @@
 package br.ifpb.diagnosticos.validacao;
 
 import java.util.Map;
+import br.ifpb.diagnosticos.enums.TipoExame;
 
 /**
  * Validador específico para exames de Ultrassonografia

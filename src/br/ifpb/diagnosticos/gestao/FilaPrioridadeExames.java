@@ -1,7 +1,7 @@
 package br.ifpb.diagnosticos.gestao;
 
 import br.ifpb.diagnosticos.exames.Exame;
-import br.ifpb.diagnosticos.modelo.Prioridade;
+import br.ifpb.diagnosticos.enums.Prioridade;
 import java.util.*;
 
 /**

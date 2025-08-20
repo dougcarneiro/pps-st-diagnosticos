@@ -4,7 +4,7 @@ import br.ifpb.diagnosticos.modelo.Paciente;
 import br.ifpb.diagnosticos.modelo.Medico;
 import br.ifpb.diagnosticos.financeiro.DescontoStrategy;
 import br.ifpb.diagnosticos.utils.GeradorNumeroExame;
-import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
+import br.ifpb.diagnosticos.enums.TipoExame;
 
 import java.util.HashMap;
 import java.util.Map;

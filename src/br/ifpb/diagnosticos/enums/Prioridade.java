@@ -1,4 +1,4 @@
-package br.ifpb.diagnosticos.modelo;
+package br.ifpb.diagnosticos.enums;
 
 /**
  * Enum para definir as prioridades dos exames
