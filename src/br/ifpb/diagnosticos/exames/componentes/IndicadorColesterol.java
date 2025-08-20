@@ -1,6 +1,7 @@
 package br.ifpb.diagnosticos.exames.componentes;
 
 import br.ifpb.diagnosticos.exames.Exame;
+import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ public class IndicadorColesterol extends IndicadorExame {
     
     public IndicadorColesterol(Exame exameBase) {
         super(exameBase);
+        this.tipoExame = TipoExame.HEMOGRAMA;
     }
     
     @Override

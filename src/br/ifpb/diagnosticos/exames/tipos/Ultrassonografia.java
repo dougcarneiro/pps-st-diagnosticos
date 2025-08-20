@@ -2,6 +2,7 @@ package br.ifpb.diagnosticos.exames.tipos;
 
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.modelo.Paciente;
+import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
 
 /**
  * Implementação concreta de exame de Ultrassonografia
@@ -10,6 +11,7 @@ public class Ultrassonografia extends Exame {
     
     public Ultrassonografia(Paciente paciente, double valor) {
         super(paciente, valor);
+        this.tipoExame = TipoExame.ULTRASSONOGRAFIA;
         this.dados.put("orgao", "Abdomen total");
         this.dados.put("achados", "Fígado de dimensões normais");
         this.dados.put("ecogenicidade", "Homogênea");

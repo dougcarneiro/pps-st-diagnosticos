@@ -6,9 +6,13 @@ import java.util.Map;
  * Validador específico para exames de Ressonância Magnética
  */
 public class ValidacaoRessonancia extends ValidadorBase {
-    
+
+    public ValidacaoRessonancia() {
+        super(TipoExame.RESSONANCIA);
+    }
+
     @Override
-    public boolean validar(Map<String, Object> dados) {
+    public boolean processar(Map<String, Object> dados, TipoExame tipoExame) {
         System.out.println("Validando dados de Ressonância Magnética...");
         
         // Validar se região está especificada
@@ -36,6 +40,6 @@ public class ValidacaoRessonancia extends ValidadorBase {
         }
         
         System.out.println("✅ Validação de Ressonância Magnética passou");
-        return validarProximo(dados);
+        return validarProximo(dados, tipoExame);
     }
 }

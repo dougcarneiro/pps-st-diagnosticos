@@ -110,7 +110,6 @@ public abstract class Laudo {
             // Se o valor for um Map, formatá-lo de forma legível com quebras de linha
             if (valor instanceof Map) {
                 try {
-                    @SuppressWarnings("unchecked")
                     Map<String, Object> mapaValor = (Map<String, Object>) valor;
                     
                     dados.append(FormatadorTexto.formatarTitleCase(chave)).append(":\n");

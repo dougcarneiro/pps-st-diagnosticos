@@ -75,10 +75,10 @@ public class SistemaExamesMedicos {
         System.out.println("\n1.1. SOLICITAÇÃO DE EXAMES SANGUÍNEOS COM INDICADORES (Decorator Pattern)");
         System.out.println("=========================================================================");
         
-        // Exame com apenas um indicador - Glicose
-        Exame exameGlicose = laboratorio.solicitarExame(
+        // Exame com apenas um indicador - Glicemia
+        Exame exameGlicemia = laboratorio.solicitarExame(
             paciente1, "HEMOGRAMA", Prioridade.ROTINA, 
-            new DescontoConvenio(), 60.0, new String[]{"GLICOSE"}
+            new DescontoConvenio(), 60.0, new String[]{"GLICEMIA"}
         );
         
         // Exame com múltiplos indicadores - Colesterol + Creatinina
@@ -90,7 +90,7 @@ public class SistemaExamesMedicos {
         // Exame completo com todos os indicadores
         Exame exameCompleto = laboratorio.solicitarExame(
             paciente3, "HEMOGRAMA", Prioridade.URGENTE, 
-            null, 180.0, new String[]{"GLICOSE", "COLESTEROL", "CREATININA"}
+            null, 180.0, new String[]{"GLICEMIA", "COLESTEROL", "CREATININA"}
         );
         
         System.out.println("\n2. FILA DE EXAMES (Priority Queue)");
@@ -122,9 +122,9 @@ public class SistemaExamesMedicos {
         String laudoUltrassom = laboratorio.gerarLaudo(exame3, "TEXTO");
         System.out.println(laudoUltrassom);
         
-        System.out.println("\n--- Laudo de Exame Sanguíneo com Glicose (PDF) ---");
-        String laudoGlicose = laboratorio.gerarLaudo(exameGlicose, "PDF");
-        System.out.println(laudoGlicose);
+        System.out.println("\n--- Laudo de Exame Sanguíneo com Glicemia (PDF) ---");
+        String laudoGlicemia = laboratorio.gerarLaudo(exameGlicemia, "PDF");
+        System.out.println(laudoGlicemia);
         
         System.out.println("\n--- Laudo de Exame Sanguíneo com Múltiplos Indicadores (HTML) ---");
         String laudoMultiplo = laboratorio.gerarLaudo(exameMultiplo1, "HTML");
@@ -148,22 +148,22 @@ public class SistemaExamesMedicos {
         System.out.println("RESULTADO: " + laudoVazio);
         
         System.out.println("\n--- Teste 2: Dados com valores inválidos ---");
-        Map<String, Object> dadosGlicoseInvalida = new HashMap<>();
-        // Simular como seria um indicador de glicose real, mas com valor inválido
-        HashMap<String, Object> glicoseInvalida = new HashMap<>();
-        glicoseInvalida.put("valor", -50.0); // Valor negativo inválido
-        glicoseInvalida.put("unidade", "mg/dL");
-        dadosGlicoseInvalida.put("glicose", glicoseInvalida);
+        Map<String, Object> dadosGlicemiaInvalida = new HashMap<>();
+        // Simular como seria um indicador de glicemia real, mas com valor inválido
+        HashMap<String, Object> glicemiaInvalida = new HashMap<>();
+        glicemiaInvalida.put("valor", -50.0); // Valor negativo inválido
+        glicemiaInvalida.put("unidade", "mg/dL");
+        dadosGlicemiaInvalida.put("glicemia", glicemiaInvalida);
         
-        exame1.setDados(dadosGlicoseInvalida);
-        System.out.println("DADOS COM GLICOSE INVÁLIDA: " + exame1.getDados());
-        String laudoGlicoseInvalida = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laudoGlicoseInvalida);
+        exame1.setDados(dadosGlicemiaInvalida);
+        System.out.println("DADOS COM GLICEMIA INVÁLIDA: " + exame1.getDados());
+        String laudoGlicemiaInvalida = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laudoGlicemiaInvalida);
         
         System.out.println("\n--- Teste 3: Dados com colesterol inválido ---");
         Map<String, Object> dadosColesterolInvalido = new HashMap<>();
         HashMap<String, Object> colesterolInvalido = new HashMap<>();
-        colesterolInvalido.put("colesterol_total", 1000.0); // Valor muito alto inválido
+        colesterolInvalido.put("total", 1000.0); // Valor muito alto inválido
         dadosColesterolInvalido.put("colesterol", colesterolInvalido);
         
         exame1.setDados(dadosColesterolInvalido);
@@ -190,7 +190,7 @@ public class SistemaExamesMedicos {
         System.out.println("✅ Memento: Histórico de Observações");
         System.out.println("✅ Facade: Interface Simplificada do Laboratório");
         System.out.println("✅ Priority Queue: Fila de Exames por Prioridade");
-        System.out.println("✅ Decorator: Indicadores em Exames Sanguíneos (Glicose, Colesterol, Creatinina)");
+        System.out.println("✅ Decorator: Indicadores em Exames Sanguíneos (Glicemia, Colesterol, Creatinina)");
         
         System.out.println("\n9. REQUISITOS FUNCIONAIS ATENDIDOS");
         System.out.println("===================================");

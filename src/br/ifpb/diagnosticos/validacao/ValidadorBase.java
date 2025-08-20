@@ -7,16 +7,41 @@ import java.util.Map;
  */
 public abstract class ValidadorBase implements Validador {
     protected Validador proximo;
-    
-    @Override
-    public void setProximo(Validador validador) {
-        this.proximo = validador;
+    protected TipoExame tipoExame;
+
+    public enum TipoExame {
+        HEMOGRAMA,
+        ULTRASSONOGRAFIA,
+        RESSONANCIA,
+    }
+
+    public ValidadorBase(TipoExame tipoExame) {
+        this.tipoExame = tipoExame;
     }
     
-    protected boolean validarProximo(Map<String, Object> dados) {
+    @Override
+    public Validador setProximo(Validador validador) {
+        this.proximo = validador;
+        return validador;
+    }
+
+    @Override
+    public boolean validar(Map<String, Object> dados, TipoExame tipoExame) {
+        if (tipoExame == this.tipoExame) {
+            boolean resultado = processar(dados, tipoExame);
+            if (!resultado) {
+                return false;
+            }
+        }
+        return validarProximo(dados, tipoExame);
+    }
+    
+    protected boolean validarProximo(Map<String, Object> dados, TipoExame tipoExame) {
         if (proximo != null) {
-            return proximo.validar(dados);
+            return proximo.validar(dados, tipoExame);
         }
         return true;
     }
+    
+    public abstract boolean processar(Map<String, Object> dados, TipoExame tipoExame);
 }

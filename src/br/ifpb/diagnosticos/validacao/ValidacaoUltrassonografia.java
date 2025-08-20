@@ -6,9 +6,13 @@ import java.util.Map;
  * Validador específico para exames de Ultrassonografia
  */
 public class ValidacaoUltrassonografia extends ValidadorBase {
-    
+
+    public ValidacaoUltrassonografia() {
+        super(TipoExame.ULTRASSONOGRAFIA);
+    }
+
     @Override
-    public boolean validar(Map<String, Object> dados) {
+    public boolean processar(Map<String, Object> dados, TipoExame tipoExame) {
         System.out.println("Validando dados de Ultrassonografia...");
         
         // Validar se órgão está especificado
@@ -24,6 +28,6 @@ public class ValidacaoUltrassonografia extends ValidadorBase {
         }
         
         System.out.println("✅ Validação de Ultrassonografia passou");
-        return validarProximo(dados);
+        return validarProximo(dados, tipoExame);
     }
 }

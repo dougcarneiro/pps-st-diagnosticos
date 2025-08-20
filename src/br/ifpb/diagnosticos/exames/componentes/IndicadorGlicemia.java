@@ -1,46 +1,48 @@
 package br.ifpb.diagnosticos.exames.componentes;
 
 import br.ifpb.diagnosticos.exames.Exame;
+import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 /**
- * Indicador para análise de glicose
+ * Indicador para análise de glicemia
  */
-public class IndicadorGlicose extends IndicadorExame {
-    private double valorGlicose;
+public class IndicadorGlicemia extends IndicadorExame {
+    private double valorGlicemia;
     
-    public IndicadorGlicose(Exame exameBase) {
+    public IndicadorGlicemia(Exame exameBase) {
         super(exameBase);
+        this.tipoExame = TipoExame.HEMOGRAMA;
     }
     
     @Override
     protected void realizarAnaliseIndicador() {
-        System.out.println("Analisando níveis de glicose no sangue...");
+        System.out.println("Analisando níveis de glicemia no sangue...");
         // Simular resultado da análise
         Random random = new Random();
-        this.valorGlicose = 70 + (random.nextDouble() * 160); // 70-230 mg/dL
+        this.valorGlicemia = 70 + (random.nextDouble() * 160); // 70-230 mg/dL
     }
     
     @Override
     protected void adicionarDadosIndicador(Map<String, Object> dados) {
         if (dados != null) {
 
-            HashMap<String, Object> glicose = new HashMap<>();
-            glicose.put("valor", valorGlicose);
-            glicose.put("unidade", getUnidadeMedida());
-            glicose.put("referencia", getValorReferencia());
-            glicose.put("status", avaliarResultado());
+            HashMap<String, Object> glicemia = new HashMap<>();
+            glicemia.put("valor", valorGlicemia);
+            glicemia.put("unidade", getUnidadeMedida());
+            glicemia.put("referencia", getValorReferencia());
+            glicemia.put("status", avaliarResultado());
 
-            dados.put("glicose", glicose);
+            dados.put("glicemia", glicemia);
         }
     }
     
     @Override
     public String getNomeIndicador() {
-        return "Glicose";
+        return "Glicemia";
     }
     
     @Override
@@ -54,11 +56,11 @@ public class IndicadorGlicose extends IndicadorExame {
     }
     
     private String avaliarResultado() {
-        if (valorGlicose < 70) {
+        if (valorGlicemia < 70) {
             return "ABAIXO DO NORMAL (Hipoglicemia)";
-        } else if (valorGlicose <= 99) {
+        } else if (valorGlicemia <= 99) {
             return "NORMAL";
-        } else if (valorGlicose <= 125) {
+        } else if (valorGlicemia <= 125) {
             return "ALTERADO (Glicemia de jejum alterada)";
         } else {
             return "ACIMA DO NORMAL (Diabetes)";

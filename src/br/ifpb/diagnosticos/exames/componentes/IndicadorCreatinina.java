@@ -1,6 +1,7 @@
 package br.ifpb.diagnosticos.exames.componentes;
 
 import br.ifpb.diagnosticos.exames.Exame;
+import br.ifpb.diagnosticos.validacao.ValidadorBase.TipoExame;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class IndicadorCreatinina extends IndicadorExame {
     
     public IndicadorCreatinina(Exame exameBase) {
         super(exameBase);
+        this.tipoExame = TipoExame.HEMOGRAMA;
     }
     
     @Override

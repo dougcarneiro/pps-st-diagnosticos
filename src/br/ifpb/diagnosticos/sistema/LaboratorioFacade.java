@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.exames.componentes.IndicadorColesterol;
 import br.ifpb.diagnosticos.exames.componentes.IndicadorCreatinina;
-import br.ifpb.diagnosticos.exames.componentes.IndicadorGlicose;
+import br.ifpb.diagnosticos.exames.componentes.IndicadorGlicemia;
 import br.ifpb.diagnosticos.exames.criadores.CriadorExame;
 import br.ifpb.diagnosticos.exames.criadores.CriadorHemograma;
 import br.ifpb.diagnosticos.exames.criadores.CriadorRessonanciaMagnetica;
@@ -33,6 +33,9 @@ import br.ifpb.diagnosticos.notificacao.SmsNotificador;
 import br.ifpb.diagnosticos.validacao.ValidacaoHemograma;
 import br.ifpb.diagnosticos.validacao.ValidacaoRessonancia;
 import br.ifpb.diagnosticos.validacao.ValidacaoUltrassonografia;
+import br.ifpb.diagnosticos.validacao.ValidacaoGlicemia;
+import br.ifpb.diagnosticos.validacao.ValidacaoColesterol;
+import br.ifpb.diagnosticos.validacao.ValidacaoCreatinina;
 import br.ifpb.diagnosticos.validacao.Validador;
 
 /**
@@ -79,8 +82,8 @@ public class LaboratorioFacade {
             exame = exameBase;
             for (String indicador : indicadores) {
                 switch (indicador.toUpperCase()) {
-                    case "GLICOSE":
-                        exame = new IndicadorGlicose(exame);
+                    case "GLICEMIA":
+                        exame = new IndicadorGlicemia(exame);
                         break;
                     case "COLESTEROL":
                         exame = new IndicadorColesterol(exame);
@@ -153,19 +156,15 @@ public class LaboratorioFacade {
         
         // Criar laudo específico baseado no tipo de exame
         Laudo laudo;
-        String tipoExame = exame.getClass().getSimpleName();
-        switch (tipoExame) {
-            case "Hemograma":
-            case "IndicadorGlicose":
-            case "IndicadorColesterol":
-            case "IndicadorCreatinina":
+        switch (exame.getTipoExame()) {
+            case HEMOGRAMA:
                 // Todos os exames sanguíneos (hemograma base ou com indicadores) usam o mesmo tipo de laudo
                 laudo = new LaudoHemograma(formatoLaudo, exame);
                 break;
-            case "Ultrassonografia":
+            case ULTRASSONOGRAFIA:
                 laudo = new LaudoUltrassonografia(formatoLaudo, exame);
                 break;
-            case "Ressonancia":
+            case RESSONANCIA:
                 laudo = new LaudoRessonanciaMagnetica(formatoLaudo, exame);
                 break;
             default:
@@ -178,31 +177,36 @@ public class LaboratorioFacade {
         laudo.adicionarObservador(new SmsNotificador("(11) 99999-9999"));
         
         // Configurar validação (Chain of Responsibility)
-        Validador validador = criarCadeiaValidacao(tipoExame);
-        laudo.configurarValidacao(validador);
+        Validador validador = criarCadeiaValidacao();
         
         // Validar dados antes de gerar laudo
-        if (validador != null && !validador.validar(exame.getDados())) {
+        if (validador != null && !validador.validar(exame.getDados(), exame.getTipoExame())) {
             return "Erro na validação dos dados do exame";
         }
         
         return laudo.gerarLaudo();
     }
-    
-    private Validador criarCadeiaValidacao(String tipoExame) {
-        switch (tipoExame) {
-            case "Hemograma":
-            case "IndicadorGlicose":
-            case "IndicadorColesterol":
-            case "IndicadorCreatinina":
-                return new ValidacaoHemograma();
-            case "Ultrassonografia":
-                return new ValidacaoUltrassonografia();
-            case "Ressonancia":
-                return new ValidacaoRessonancia();
-            default:
-                return null;
-        }
+
+    private Validador criarCadeiaValidacao() {
+        // Validações dos tipos de exame
+        Validador handlerHemograma = new ValidacaoHemograma();
+        Validador handlerUltrasom = new ValidacaoUltrassonografia();
+        Validador handlerRessonancia = new ValidacaoRessonancia();
+        
+        // Validações específicas dos indicadores
+        Validador handlerGlicemia = new ValidacaoGlicemia();
+        Validador handlerColesterol = new ValidacaoColesterol();
+        Validador handlerCreatinina = new ValidacaoCreatinina();
+        
+        // Configurar cadeia: tipos de exame -> indicadores específicos
+        handlerHemograma
+            .setProximo(handlerGlicemia)
+            .setProximo(handlerColesterol)
+            .setProximo(handlerCreatinina)
+            .setProximo(handlerUltrasom)
+            .setProximo(handlerRessonancia);
+
+        return handlerHemograma;
     }
     
     public void exibirFilaExames() {
