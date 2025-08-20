@@ -22,7 +22,7 @@ public class ValidacaoCreatinina extends ValidadorBase {
                 System.out.println("❌ Erro: Dados de creatinina devem estar em formato HashMap");
                 return false;
             } else {
-                HashMap<String, Object> creatininaMap = (HashMap<String, Object>) creatininaObj;
+                Map<String, Object> creatininaMap = (Map<String, Object>) creatininaObj;
                 if (!creatininaMap.containsKey("valor")) {
                     System.out.println("❌ Erro: Valor de creatinina não encontrado");
                     return false;

@@ -34,7 +34,7 @@ public class IndicadorColesterol extends IndicadorExame {
     @Override
     protected void adicionarDadosIndicador(Map<String, Object> dados) {
         if (dados != null) {
-            HashMap<String, Object> colesterol = new HashMap<>();
+            Map<String, Object> colesterol = new HashMap<>();
             colesterol.put("total", valorColesterolTotal);
             colesterol.put("ldl", valorLDL);
             colesterol.put("hdl", valorHDL);

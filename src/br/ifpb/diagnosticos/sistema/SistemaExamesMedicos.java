@@ -153,7 +153,7 @@ public class SistemaExamesMedicos {
         System.out.println("\n--- Teste 2: Dados com valores inválidos ---");
         Map<String, Object> dadosGlicemiaInvalida = new HashMap<>();
         // Simular como seria um indicador de glicemia real, mas com valor inválido
-        HashMap<String, Object> glicemiaInvalida = new HashMap<>();
+        Map<String, Object> glicemiaInvalida = new HashMap<>();
         glicemiaInvalida.put("valor", -50.0); // Valor negativo inválido
         glicemiaInvalida.put("unidade", "mg/dL");
         dadosGlicemiaInvalida.put("glicemia", glicemiaInvalida);
@@ -165,7 +165,7 @@ public class SistemaExamesMedicos {
         
         System.out.println("\n--- Teste 3: Dados com colesterol inválido ---");
         Map<String, Object> dadosColesterolInvalido = new HashMap<>();
-        HashMap<String, Object> colesterolInvalido = new HashMap<>();
+        Map<String, Object> colesterolInvalido = new HashMap<>();
         colesterolInvalido.put("total", 1000.0); // Valor muito alto inválido
         dadosColesterolInvalido.put("colesterol", colesterolInvalido);
         

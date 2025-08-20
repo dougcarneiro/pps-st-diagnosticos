@@ -22,7 +22,7 @@ public class ValidacaoGlicemia extends ValidadorBase {
                 System.out.println("❌ Erro: Dados de glicemia devem estar em formato HashMap");
                 return false;
             } else {
-                HashMap<String, Object> glicemiaMap = (HashMap<String, Object>) glicemiaObj;
+                Map<String, Object> glicemiaMap = (Map<String, Object>) glicemiaObj;
                 if (!glicemiaMap.containsKey("valor")) {
                     System.out.println("❌ Erro: Valor de glicemia não encontrado");
                     return false;

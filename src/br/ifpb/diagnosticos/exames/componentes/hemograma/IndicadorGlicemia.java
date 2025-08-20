@@ -31,7 +31,7 @@ public class IndicadorGlicemia extends IndicadorExame {
     protected void adicionarDadosIndicador(Map<String, Object> dados) {
         if (dados != null) {
 
-            HashMap<String, Object> glicemia = new HashMap<>();
+            Map<String, Object> glicemia = new HashMap<>();
             glicemia.put("valor", valorGlicemia);
             glicemia.put("unidade", getUnidadeMedida());
             glicemia.put("referencia", getValorReferencia());

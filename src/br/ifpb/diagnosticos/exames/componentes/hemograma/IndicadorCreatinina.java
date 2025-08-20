@@ -30,7 +30,7 @@ public class IndicadorCreatinina extends IndicadorExame {
     @Override
     protected void adicionarDadosIndicador(Map<String, Object> dados) {
         if (dados != null) {
-            HashMap<String, Object> creatinina = new HashMap<>();
+            Map<String, Object> creatinina = new HashMap<>();
             creatinina.put("valor", valorCreatinina);
             creatinina.put("unidade", getUnidadeMedida());
             creatinina.put("referencia", getValorReferencia());
