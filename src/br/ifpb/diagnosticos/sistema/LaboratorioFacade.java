@@ -1,10 +1,11 @@
 package br.ifpb.diagnosticos.sistema;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import br.ifpb.diagnosticos.enums.Prioridade;
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.exames.componentes.hemograma.IndicadorColesterol;
 import br.ifpb.diagnosticos.exames.componentes.hemograma.IndicadorCreatinina;
@@ -16,9 +17,6 @@ import br.ifpb.diagnosticos.exames.criadores.CriadorUltrassonografia;
 import br.ifpb.diagnosticos.financeiro.DescontoStrategy;
 import br.ifpb.diagnosticos.gestao.FilaPrioridadeExames;
 import br.ifpb.diagnosticos.laudos.Laudo;
-import br.ifpb.diagnosticos.laudos.HistoricoObservacao;
-import br.ifpb.diagnosticos.laudos.Observacao;
-import br.ifpb.diagnosticos.laudos.ObservacaoMemento;
 import br.ifpb.diagnosticos.laudos.formatos.FormatoLaudo;
 import br.ifpb.diagnosticos.laudos.formatos.HTML;
 import br.ifpb.diagnosticos.laudos.formatos.PDF;
@@ -26,17 +24,16 @@ import br.ifpb.diagnosticos.laudos.formatos.Texto;
 import br.ifpb.diagnosticos.laudos.tipos.LaudoHemograma;
 import br.ifpb.diagnosticos.laudos.tipos.LaudoRessonanciaMagnetica;
 import br.ifpb.diagnosticos.laudos.tipos.LaudoUltrassonografia;
-import br.ifpb.diagnosticos.modelo.Paciente;
 import br.ifpb.diagnosticos.modelo.Medico;
-import br.ifpb.diagnosticos.enums.Prioridade;
+import br.ifpb.diagnosticos.modelo.Paciente;
 import br.ifpb.diagnosticos.notificacao.EmailNotificador;
 import br.ifpb.diagnosticos.notificacao.SmsNotificador;
+import br.ifpb.diagnosticos.validacao.ValidacaoColesterol;
+import br.ifpb.diagnosticos.validacao.ValidacaoCreatinina;
+import br.ifpb.diagnosticos.validacao.ValidacaoGlicemia;
 import br.ifpb.diagnosticos.validacao.ValidacaoHemograma;
 import br.ifpb.diagnosticos.validacao.ValidacaoRessonancia;
 import br.ifpb.diagnosticos.validacao.ValidacaoUltrassonografia;
-import br.ifpb.diagnosticos.validacao.ValidacaoGlicemia;
-import br.ifpb.diagnosticos.validacao.ValidacaoColesterol;
-import br.ifpb.diagnosticos.validacao.ValidacaoCreatinina;
 import br.ifpb.diagnosticos.validacao.Validador;
 
 /**
@@ -274,67 +271,5 @@ public class LaboratorioFacade {
     
     public List<Exame> getExamesProcessados() {
         return new ArrayList<>(examesProcessados);
-    }
-    
-    /**
-     * Demonstra o uso do padrão Memento com histórico de observações
-     */
-    public void demonstrarHistoricoObservacoes() {
-        System.out.println("\n=== DEMONSTRAÇÃO: HISTÓRICO DE OBSERVAÇÕES (Memento Pattern) ===");
-        
-        // Criar uma observação inicial
-        Observacao observacao = new Observacao("Paciente apresenta sintomas iniciais");
-        HistoricoObservacao historico = new HistoricoObservacao();
-        
-        // Salvar estado inicial
-        historico.salvar(observacao.criarMemento());
-        System.out.println("Estado 1: " + observacao.getTexto());
-        
-        // Primeira modificação
-        observacao.setTexto("Paciente apresenta melhora após medicação inicial");
-        historico.salvar(observacao.criarMemento());
-        System.out.println("Estado 2: " + observacao.getTexto());
-        
-        // Segunda modificação
-        observacao.setTexto("Paciente relata diminuição significativa dos sintomas");
-        historico.salvar(observacao.criarMemento());
-        System.out.println("Estado 3: " + observacao.getTexto());
-        
-        // Terceira modificação
-        observacao.setTexto("Paciente apresenta recuperação completa - alta médica recomendada");
-        historico.salvar(observacao.criarMemento());
-        System.out.println("Estado 4: " + observacao.getTexto());
-        
-        // Demonstrar navegação no histórico
-        System.out.println("\n--- Navegação no Histórico ---");
-        System.out.println("Total de estados salvos: " + historico.getQuantidadeEstados());
-        
-        // Restaurar estado anterior (3º estado)
-        ObservacaoMemento estadoAnterior = historico.restaurar(2);
-        if (estadoAnterior != null) {
-            observacao.restaurar(estadoAnterior);
-            System.out.println("Voltando ao estado 3: " + observacao.getTexto());
-        }
-        
-        // Restaurar primeiro estado
-        ObservacaoMemento estadoInicial = historico.restaurar(0);
-        if (estadoInicial != null) {
-            observacao.restaurar(estadoInicial);
-            System.out.println("Voltando ao estado inicial: " + observacao.getTexto());
-        }
-        
-        // Restaurar último estado
-        ObservacaoMemento ultimoEstado = historico.restaurar(historico.getQuantidadeEstados() - 1);
-        if (ultimoEstado != null) {
-            observacao.restaurar(ultimoEstado);
-            System.out.println("Voltando ao último estado: " + observacao.getTexto());
-        }
-        
-        // Exibir todo o histórico
-        System.out.println("\n--- Histórico Completo ---");
-        for (int i = 0; i < historico.getQuantidadeEstados(); i++) {
-            ObservacaoMemento memento = historico.restaurar(i);
-            System.out.println("Estado " + (i + 1) + ": " + memento.getEstado());
-        }
     }
 }

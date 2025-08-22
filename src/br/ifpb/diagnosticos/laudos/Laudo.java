@@ -18,12 +18,14 @@ public abstract class Laudo {
     protected Observacao observacao;
     protected Validador validadorInicial;
     protected List<Observador> observadores;
+    protected ArrayList<Observacao> historicoObservacao;
     
     public Laudo(FormatoLaudo formato, Exame exame) {
         this.formato = formato;
         this.exame = exame;
         this.observacao = new Observacao("");
         this.observadores = new ArrayList<>();
+        this.historicoObservacao = new ArrayList<>();
     }
     
     // Observer Pattern - adicionar observador
@@ -147,6 +149,47 @@ public abstract class Laudo {
             }
         }
         return dados.toString();
+    }
+    
+    // Métodos para gerenciar histórico de observações (Memento Pattern)
+    public void adicionarObservacao(String textoObservacao) {
+        // Criar nova observação e adicionar ao histórico
+        Observacao novaObservacao = new Observacao(textoObservacao);
+        historicoObservacao.add(novaObservacao);
+        // Atualizar observação atual
+        observacao.setTexto(textoObservacao);
+    }
+    
+    public void restaurarObservacao(int indice) {
+        if (indice >= 0 && indice < historicoObservacao.size()) {
+            Observacao observacaoHistorica = historicoObservacao.get(indice);
+            observacao.setTexto(observacaoHistorica.getTexto());
+        }
+    }
+    
+    public ArrayList<Observacao> getHistoricoObservacao() {
+        return historicoObservacao;
+    }
+    
+    public void demonstrarHistoricoObservacoes() {
+        System.out.println("\n=== HISTÓRICO DE OBSERVAÇÕES DO LAUDO ===");
+        System.out.println("Paciente: " + exame.getPaciente().getNome());
+        System.out.println("Exame: " + exame.getTipoExame());
+        System.out.println("Número: " + exame.getNumeroExame());
+        
+        if (historicoObservacao.size() > 0) {
+            System.out.println("\n--- Histórico Completo ---");
+            for (int i = 0; i < historicoObservacao.size(); i++) {
+                Observacao obs = historicoObservacao.get(i);
+                System.out.println("Estado " + (i + 1) + ": " + obs.getTexto());
+            }
+            
+            System.out.println("\n--- Navegação no Histórico ---");
+            System.out.println("Total de estados salvos: " + historicoObservacao.size());
+            System.out.println("Observação atual: " + observacao.getTexto());
+        } else {
+            System.out.println("Nenhuma observação registrada ainda.");
+        }
     }
     
     // Getters e Setters

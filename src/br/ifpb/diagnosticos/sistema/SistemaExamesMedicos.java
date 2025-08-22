@@ -1,14 +1,22 @@
 package br.ifpb.diagnosticos.sistema;
 
-import br.ifpb.diagnosticos.modelo.Paciente;
-import br.ifpb.diagnosticos.modelo.Medico;
-import br.ifpb.diagnosticos.enums.Prioridade;
-import br.ifpb.diagnosticos.exames.Exame;
-import br.ifpb.diagnosticos.financeiro.*;
-import br.ifpb.diagnosticos.utils.CarregadorCSV;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import br.ifpb.diagnosticos.enums.Prioridade;
+import br.ifpb.diagnosticos.exames.Exame;
+import br.ifpb.diagnosticos.financeiro.DescontoConvenio;
+import br.ifpb.diagnosticos.financeiro.DescontoIdoso;
+import br.ifpb.diagnosticos.laudos.Laudo;
+import br.ifpb.diagnosticos.laudos.formatos.FormatoLaudo;
+import br.ifpb.diagnosticos.laudos.formatos.Texto;
+import br.ifpb.diagnosticos.modelo.Medico;
+import br.ifpb.diagnosticos.modelo.Paciente;
+import br.ifpb.diagnosticos.utils.CarregadorCSV;
+import br.ifpb.diagnosticos.laudos.tipos.LaudoHemograma;
+import br.ifpb.diagnosticos.laudos.tipos.LaudoRessonanciaMagnetica;
+import br.ifpb.diagnosticos.laudos.tipos.LaudoUltrassonografia;
 
 /**
  * Programa principal para demonstrar o sistema de exames médicos
@@ -136,10 +144,14 @@ public class SistemaExamesMedicos {
         System.out.println("\n--- Laudo de Exame Sanguíneo Completo (Texto) ---");
         String laudoCompletoTxt = laboratorio.gerarLaudo(exameCompleto, "TEXTO");
         System.out.println(laudoCompletoTxt);
+
+        System.out.println("\n6. DEMONSTRAÇÃO DE HISTÓRICO DE OBSERVAÇÕES EM LAUDOS (Memento Pattern)");
+        System.out.println("========================================================================");
+        // Demonstrar o padrão Memento com histórico de observações nos laudos
+        demonstrarHistoricoObservacoesEmLaudos(laboratorio.getExamesProcessados());
         
         System.out.println("\n5. DEMONSTRAÇÃO DE VALIDAÇÃO (Chain of Responsibility)");
         System.out.println("=======================================================");
-        
         // Testar validação com dados realmente inválidos
         Map<String, Object> dadosInvalidos = new HashMap<>();
         
@@ -174,11 +186,75 @@ public class SistemaExamesMedicos {
         String laudoColesterolInvalido = laboratorio.gerarLaudo(exame1, "TEXTO");
         System.out.println("RESULTADO: " + laudoColesterolInvalido);
         
-        System.out.println("\n6. DEMONSTRAÇÃO DE HISTÓRICO DE OBSERVAÇÕES (Memento Pattern)");
-        System.out.println("==============================================================");
-        
-        // Demonstrar o padrão Memento com histórico de observações
-        laboratorio.demonstrarHistoricoObservacoes();
         System.out.println("\n=== SISTEMA EXECUTADO COM SUCESSO! ===");
+    }
+    
+    /**
+     * Demonstra o uso do padrão Memento com histórico de observações em laudos
+     */
+    private static void demonstrarHistoricoObservacoesEmLaudos(List<Exame> exames) {
+        System.out.println("\n=== DEMONSTRAÇÃO: HISTÓRICO DE OBSERVAÇÕES EM LAUDOS (Memento Pattern) ===");
+
+        if (exames.isEmpty()) {
+            System.out.println("Nenhum exame processado para demonstração.");
+            return;
+        }
+        
+        // Usar diferentes exames para demonstrar laudos independentes
+        FormatoLaudo formatoTexto = new Texto();
+        
+        // Criar laudos para diferentes pacientes
+        System.out.println("\n--- Demonstração com Múltiplos Laudos ---");
+
+        for (Exame exameDemo : exames) {
+            System.out.println("exame: " + exameDemo);
+
+            Laudo laudoDemo;
+            switch (exameDemo.getTipoExame()) {
+                case HEMOGRAMA:
+                    laudoDemo = new LaudoHemograma(formatoTexto, exameDemo);
+                    break;
+                case ULTRASSONOGRAFIA:
+                    laudoDemo = new LaudoUltrassonografia(formatoTexto, exameDemo);
+                    break;
+                case RESSONANCIA:
+                    laudoDemo = new LaudoRessonanciaMagnetica(formatoTexto, exameDemo);
+                    break;
+                default:
+                    laudoDemo = new LaudoHemograma(formatoTexto, exameDemo);
+            }
+
+            System.out.println("\n*** LAUDO " + (exameDemo.getCodigo()) + " - Paciente: " + exameDemo.getPaciente().getNome() + " ***");
+
+            // Simular evolução específica para cada paciente
+            if (exameDemo.getCodigo() % 2 == 0) {
+                // Primeiro paciente - evolução positiva
+                laudoDemo.adicionarObservacao("Paciente apresenta sintomas iniciais");
+                laudoDemo.adicionarObservacao("Resultados mostram melhora significativa");
+                laudoDemo.adicionarObservacao("Quadro clínico estabilizado - alta médica");
+            } else {
+                // Segundo paciente - evolução mais detalhada
+                laudoDemo.adicionarObservacao("Paciente com histórico de complicações");
+                laudoDemo.adicionarObservacao("Necessário acompanhamento rigoroso");
+                laudoDemo.adicionarObservacao("Medicação ajustada conforme protocolo");
+                laudoDemo.adicionarObservacao("Paciente apresenta melhora gradual");
+                laudoDemo.adicionarObservacao("Resultados dentro da normalidade");
+            }
+            
+            // Mostrar histórico do laudo
+            laudoDemo.demonstrarHistoricoObservacoes();
+            
+            // Demonstrar navegação específica para este laudo
+            if (laudoDemo.getHistoricoObservacao().size() > 2) {
+                System.out.println("\n--- Navegação no Histórico do Laudo " + (exameDemo.getCodigo()) + " ---");
+                int estadoMedio = laudoDemo.getHistoricoObservacao().size() / 2;
+                laudoDemo.restaurarObservacao(estadoMedio);
+                System.out.println("Estado médio restaurado: " + laudoDemo.getObservacao().getTexto());
+                
+                // Restaurar último estado
+                laudoDemo.restaurarObservacao(laudoDemo.getHistoricoObservacao().size() - 1);
+                System.out.println("Último estado restaurado: " + laudoDemo.getObservacao().getTexto());
+            }
+        }
     }
 }
