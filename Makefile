@@ -5,10 +5,12 @@
 # Configurações
 JAVA_SRC_DIR = src
 BUILD_DIR = build
+LIB_DIR = lib
 MAIN_CLASS = br.ifpb.diagnosticos.sistema.SistemaExamesMedicos
 DEMO_CLASS = br.ifpb.diagnosticos.sistema.DemoConfiguracaoSistema
 JAVA_FILES = $(shell find $(JAVA_SRC_DIR) -name "*.java")
 SCRIPTS_DIR = scripts
+CLASSPATH = $(BUILD_DIR):$(LIB_DIR)/*
 
 .PHONY: all clean compile run demo check setup help test
 
@@ -41,7 +43,7 @@ compile: check setup
 	@echo "🔨 Compilando sistema completo..."
 	@echo "   Encontrados $$(echo $(JAVA_FILES) | wc -w) arquivos Java"
 	@find $(JAVA_SRC_DIR) -name "*.java" > sources.tmp
-	@javac -d $(BUILD_DIR) @sources.tmp
+	@javac -cp "$(LIB_DIR)/*" -d $(BUILD_DIR) @sources.tmp
 	@if [ $$? -eq 0 ]; then \
 		echo "✅ Compilação bem-sucedida!"; \
 		echo "📁 Arquivos .class criados em: $(BUILD_DIR)/"; \
@@ -58,7 +60,7 @@ run: compile
 	@echo "🚀 Executando Sistema de Exames Médicos..."
 	@echo "==========================================="
 	@echo ""
-	@cd $(BUILD_DIR) && java $(MAIN_CLASS)
+	@java -cp "$(CLASSPATH)" $(MAIN_CLASS)
 
 # Executar demonstração de configuração
 demo: compile
@@ -66,7 +68,7 @@ demo: compile
 	@echo "🎯 Executando Demonstração de Configuração..."
 	@echo "=============================================="
 	@echo ""
-	@cd $(BUILD_DIR) && java $(DEMO_CLASS)
+	@java -cp "$(CLASSPATH)" $(DEMO_CLASS)
 
 # Executar ambos os programas
 test: run demo

@@ -52,12 +52,12 @@ public class SistemaExamesMedicos {
         
         // Usar pacientes carregados + alguns criados manualmente
         Paciente paciente1 = pacientesCarregados.size() > 0 ? pacientesCarregados.get(0) 
-                            : new Paciente("João Silva", "123.456.789-01", "Unimed", 45);
+                            : new Paciente("João Silva", "123.456.789-01", "Unimed", 45, "joao.silva@email.com");
         Paciente paciente2 = pacientesCarregados.size() > 1 ? pacientesCarregados.get(1) 
-                            : new Paciente("Maria Santos", "987.654.321-02", "Bradesco Saúde", 72);
+                            : new Paciente("Maria Santos", "987.654.321-02", "Bradesco Saúde", 72, "maria.santos@email.com");
         Paciente paciente3 = pacientesCarregados.size() > 2 ? pacientesCarregados.get(2) 
-                            : new Paciente("Pedro Oliveira", "456.789.123-03", "Particular", 25);
-        
+                            : new Paciente("Pedro Oliveira", "456.789.123-03", "Particular", 25, "pedro.oliveira@email.com");
+
         System.out.println("\n1. SOLICITAÇÃO DE EXAMES");
         System.out.println("========================");
         

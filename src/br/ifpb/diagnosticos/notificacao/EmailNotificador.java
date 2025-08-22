@@ -1,5 +1,7 @@
 package br.ifpb.diagnosticos.notificacao;
 
+import br.ifpb.diagnosticos.notificacao.servicos.EmailServico;
+
 /**
  * Implementação de notificação por email (Observer Pattern)
  */
@@ -11,7 +13,8 @@ public class EmailNotificador implements Observador {
     }
     
     @Override
-    public void atualizar(String mensagem) {
+    public void atualizar(String nome, String mensagem) {
+        EmailServico.enviarEmail(nome, enderecoEmail, mensagem);
         System.out.println("📧 Email enviado para " + enderecoEmail + ": " + mensagem);
     }
     

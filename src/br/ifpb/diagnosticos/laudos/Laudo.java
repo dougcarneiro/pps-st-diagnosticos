@@ -41,7 +41,7 @@ public abstract class Laudo {
     // Observer Pattern - notificar observadores
     protected void notificarObservadores(String evento) {
         for (Observador observador : observadores) {
-            observador.atualizar(evento);
+            observador.atualizar(exame.getPaciente().getNome(), evento);
         }
     }
     

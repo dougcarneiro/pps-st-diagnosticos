@@ -13,14 +13,16 @@ public class Paciente {
     private String cpf;
     private String convenio;
     private int idade;
+    private String email;
     private List<Exame> exames;
     private List<Laudo> laudos;
     
-    public Paciente(String nome, String cpf, String convenio, int idade) {
+    public Paciente(String nome, String cpf, String convenio, int idade, String email) {
         this.nome = nome;
         this.cpf = cpf;
         this.convenio = convenio;
         this.idade = idade;
+        this.email = email;
         this.exames = new ArrayList<>();
         this.laudos = new ArrayList<>();
     }
@@ -48,6 +50,10 @@ public class Paciente {
     
     public int getIdade() {
         return idade;
+    }
+
+    public String getEmail() {
+        return email;
     }
     
     public List<Exame> getExames() {

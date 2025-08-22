@@ -221,9 +221,9 @@ public class LaboratorioFacade {
         }
         
         // Configurar notificações (Observer)
-        laudo.adicionarObservador(new EmailNotificador(exame.getPaciente().getNome() + "@email.com"));
+        laudo.adicionarObservador(new EmailNotificador(exame.getPaciente().getEmail()));
         laudo.adicionarObservador(new SmsNotificador("(11) 99999-9999"));
-        
+
         // Configurar validação (Chain of Responsibility)
         Validador validador = criarCadeiaValidacao();
         

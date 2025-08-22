@@ -5,13 +5,13 @@ package br.ifpb.diagnosticos.notificacao;
  */
 public class SmsNotificador implements Observador {
     private String numeroTelefone;
-    
+
     public SmsNotificador(String numeroTelefone) {
         this.numeroTelefone = numeroTelefone;
     }
-    
+
     @Override
-    public void atualizar(String mensagem) {
+    public void atualizar(String nome, String mensagem) {
         System.out.println("📱 SMS enviado para " + numeroTelefone + ": " + mensagem);
     }
     

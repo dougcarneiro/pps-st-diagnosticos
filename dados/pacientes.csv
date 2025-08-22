@@ -1,6 +1,6 @@
-nome,cpf,convenio,idade
-João Silva,123.456.789-01,Unimed,45
-Maria Santos,987.654.321-02,Bradesco Saúde,72
-Pedro Oliveira,456.789.123-03,SUS,25
-Ana Costa,111.222.333-44,SulAmérica,34
-Carlos Mendes,555.666.777-88,NotreDame,58
+nome,cpf,convenio,idade,email
+João Silva,123.456.789-01,Unimed,45,joao.silva.dev@gmail.com
+Maria Santos,987.654.321-02,Bradesco Saúde,72,maria.santos.oficial@hotmail.com
+Pedro Oliveira,456.789.123-03,SUS,25,pedro.oliveira.gamer@outlook.com
+Ana Costa,111.222.333-44,SulAmérica,34,ana.costa.designer@yahoo.com
+Carlos Mendes,555.666.777-88,NotreDame,58,carlos.mendes.chef@protonmail.com

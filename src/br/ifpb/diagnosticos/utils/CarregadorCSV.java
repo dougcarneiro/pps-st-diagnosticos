@@ -40,8 +40,9 @@ public class CarregadorCSV {
                     String cpf = dados[1].trim();
                     String convenio = dados[2].trim();
                     int idade = Integer.parseInt(dados[3].trim());
-                    
-                    pacientes.add(new Paciente(nome, cpf, convenio, idade));
+                    String email = dados.length > 4 ? dados[4].trim() : "";
+
+                    pacientes.add(new Paciente(nome, cpf, convenio, idade, email));
                 }
             }
             

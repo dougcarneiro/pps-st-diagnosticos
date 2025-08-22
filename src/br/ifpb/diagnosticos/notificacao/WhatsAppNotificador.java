@@ -5,13 +5,13 @@ package br.ifpb.diagnosticos.notificacao;
  */
 public class WhatsAppNotificador implements Observador {
     private String numeroWhatsApp;
-    
+
     public WhatsAppNotificador(String numeroWhatsApp) {
         this.numeroWhatsApp = numeroWhatsApp;
     }
     
     @Override
-    public void atualizar(String mensagem) {
+    public void atualizar(String nome, String mensagem) {
         System.out.println("💬 WhatsApp enviado para " + numeroWhatsApp + ": " + mensagem);
     }
     
