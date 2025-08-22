@@ -47,6 +47,7 @@ public class ConfiguracaoSistema {
         // Configurações de email
         propriedades.setProperty("email.remetente", "douglas.carneiro@academico.ifpb.edu.br");
         propriedades.setProperty("email.senha", "usar senha de app");
+        propriedades.setProperty("email.destinoDev", "caio.soares@academico.ifpb.edu.br");
         
         // Configurações de notificação
         propriedades.setProperty("notificacao.email.ativo", "dev");
@@ -121,6 +122,10 @@ public class ConfiguracaoSistema {
     
     public String getEmailSenha() {
         return get("email.senha", "usar senha de app");
+    }
+    
+    public String getEmailDestinoDev() {
+        return get("email.destinoDev", "caio.soares@academico.ifpb.edu.br");
     }
     
     public String getNomeLaboratorio() {

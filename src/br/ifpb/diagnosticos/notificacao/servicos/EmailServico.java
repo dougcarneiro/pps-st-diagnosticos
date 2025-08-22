@@ -30,7 +30,7 @@ public class EmailServico {
             // Decide o destinatário baseado na configuração de dev
             String destinatario;
             if (config.isNotificacaoEmailDev()) {
-                destinatario = "caio.soares@academico.ifpb.edu.br"; // Email para dev
+                destinatario = config.getEmailDestinoDev(); // Email configurado para dev
             } else {
                 destinatario = email; // Email real do paciente
             }
