@@ -181,7 +181,6 @@ public class LaboratorioFacade {
         Exame exame = filaExames.proximoExame();
         if (exame != null) {
             System.out.println("Processando exame...");
-            exame.realizarExame();
             // Adicionar à lista de exames processados
             examesProcessados.add(exame);
         } else {

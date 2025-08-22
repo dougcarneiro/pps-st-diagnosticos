@@ -1,0 +1,497 @@
+@startuml Sistema de Exames Médicos - ST Diagnósticos
+
+!theme plain
+skinparam backgroundColor White
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+top to bottom direction
+hide empty members
+
+' ============================================
+' ENTIDADES PRINCIPAIS
+' ============================================
+rectangle "MODELO DE DOMÍNIO" as DOMAIN {
+class Paciente {
+    - nome: String
+    - cpf: String
+    - convenio: String
+    - idade: int
+    - exames: List<Exame>
+    - laudos: List<Laudo>
+    + Paciente(nome, cpf, convenio, idade)
+    + adicionarExame(exame: Exame): void
+    + adicionarLaudo(laudo: Laudo): void
+    + getNome(): String
+    + getCpf(): String
+    + getConvenio(): String
+    + getIdade(): int
+}
+
+class Medico {
+    - nome: String
+    - crm: String
+    - especialidade: String
+    + Medico(nome, crm, especialidade)
+    + getNome(): String
+    + getCrm(): String
+    + getEspecialidade(): String
+}
+
+enum Prioridade {
+    EMERGENCIA(1)
+    MUITO_URGENTE(2)
+    URGENTE(3)
+    POUCO_URGENTE(4)
+    ROTINA(5)
+    --
+    - nivel: int
+    + getNivel(): int
+}
+
+enum TipoExame {
+    HEMOGRAMA
+    ULTRASSONOGRAFIA
+    RESSONANCIA
+}
+}
+
+' ============================================
+' TEMPLATE METHOD & FACTORY METHOD
+' ============================================
+rectangle "TEMPLATE METHOD & FACTORY METHOD" as TEMPLATE_FACTORY #E8F5E8 {
+abstract class Exame {
+    # codigo: int
+    # descontoStrategy: DescontoStrategy
+    # valor: double
+    # paciente: Paciente
+    # medicoSolicitante: Medico
+    # dataImplantacao: Date
+    # dados: Map<String, Object>
+    # tipoExame: TipoExame
+    --
+    + Exame(paciente, valor)
+    + {final} realizarExame(): void
+    # {abstract} prepararPaciente(): void
+    # {abstract} realizarProcedimento(): void
+    # finalizarExame(): void
+    + setDescontoStrategy(strategy): void
+    + aplicarDesconto(valor): double
+    + getCodigo(): int
+    + getValor(): double
+    + getPaciente(): Paciente
+    + getTipoExame(): TipoExame
+}
+
+class Hemograma extends Exame {
+    + Hemograma(paciente, valor)
+    # prepararPaciente(): void
+    # realizarProcedimento(): void
+}
+
+class Ressonancia extends Exame {
+    + Ressonancia(paciente, valor)
+    # prepararPaciente(): void
+    # realizarProcedimento(): void
+}
+
+class Ultrassonografia extends Exame {
+    + Ultrassonografia(paciente, valor)
+    # prepararPaciente(): void
+    # realizarProcedimento(): void
+}
+
+abstract class CriadorExame {
+    + {abstract} criarExame(paciente, valor): Exame
+}
+
+class CriadorHemograma extends CriadorExame {
+    + criarExame(paciente, valor): Exame
+}
+
+class CriadorRessonanciaMagnetica extends CriadorExame {
+    + criarExame(paciente, valor): Exame
+}
+
+class CriadorUltrassonografia extends CriadorExame {
+    + criarExame(paciente, valor): Exame
+}
+}
+
+' ============================================
+' DECORATOR PATTERN
+' ============================================
+rectangle "DECORATOR PATTERN" as DECORATOR #FCE4EC {
+abstract class IndicadorExame extends Exame {
+    # exameBase: Exame
+    - exameBaseExecutado: boolean
+    --
+    + IndicadorExame(exameBase)
+    # {abstract} realizarAnaliseIndicador(): void
+    # {abstract} adicionarDadosIndicador(dados): void
+    + {abstract} getNomeIndicador(): String
+    + {abstract} getUnidadeMedida(): String
+    + {abstract} getValorReferencia(): String
+    # prepararPaciente(): void
+    # realizarProcedimento(): void
+    + getDados(): Map<String, Object>
+}
+
+class IndicadorGlicemia extends IndicadorExame {
+    - valorGlicemia: double
+    + IndicadorGlicemia(exameBase)
+    # realizarAnaliseIndicador(): void
+    # adicionarDadosIndicador(dados): void
+    + getNomeIndicador(): String
+    + getUnidadeMedida(): String
+    + getValorReferencia(): String
+}
+
+class IndicadorColesterol extends IndicadorExame {
+    - valorColesterolTotal: double
+    - valorLDL: double
+    - valorHDL: double
+    + IndicadorColesterol(exameBase)
+    # realizarAnaliseIndicador(): void
+    # adicionarDadosIndicador(dados): void
+    + getNomeIndicador(): String
+    + getUnidadeMedida(): String
+    + getValorReferencia(): String
+}
+
+class IndicadorCreatinina extends IndicadorExame {
+    - valorCreatinina: double
+    + IndicadorCreatinina(exameBase)
+    # realizarAnaliseIndicador(): void
+    # adicionarDadosIndicador(dados): void
+    + getNomeIndicador(): String
+    + getUnidadeMedida(): String
+    + getValorReferencia(): String
+}
+}
+
+' ============================================
+' STRATEGY PATTERN
+' ============================================
+rectangle "STRATEGY PATTERN" as STRATEGY #FFF3E0 {
+interface DescontoStrategy {
+    + calcularDesconto(valor: double): double
+}
+
+class DescontoConvenio implements DescontoStrategy {
+    - config: ConfiguracaoSistema
+    + calcularDesconto(valor: double): double
+}
+
+class DescontoIdoso implements DescontoStrategy {
+    - config: ConfiguracaoSistema
+    + calcularDesconto(valor: double): double
+}
+}
+
+' ============================================
+' BRIDGE PATTERN & MEMENTO PATTERN
+' ============================================
+rectangle "BRIDGE & MEMENTO PATTERNS" as BRIDGE_MEMENTO #F1F8E9 {
+abstract class Laudo {
+    # formato: FormatoLaudo
+    # exame: Exame
+    # observacao: Observacao
+    # validadorInicial: Validador
+    # observadores: List<Observador>
+    --
+    + Laudo(formato, exame)
+    + {final} gerarLaudo(): String
+    # gerarCabecalho(): String
+    # gerarDadosPaciente(): String
+    # {abstract} gerarDadosExame(): String
+    # gerarObservacoes(): String
+    # gerarRodape(): String
+    + adicionarObservador(observador): void
+    + removerObservador(observador): void
+    # notificarObservadores(evento): void
+    + configurarValidacao(validador): void
+}
+
+class LaudoHemograma extends Laudo {
+    + LaudoHemograma(formato, exame)
+    # gerarDadosExame(): String
+}
+
+class LaudoRessonanciaMagnetica extends Laudo {
+    + LaudoRessonanciaMagnetica(formato, exame)
+    # gerarDadosExame(): String
+}
+
+class LaudoUltrassonografia extends Laudo {
+    + LaudoUltrassonografia(formato, exame)
+    # gerarDadosExame(): String
+}
+
+interface FormatoLaudo {
+    + formatar(conteudo: String): String
+}
+
+class PDF implements FormatoLaudo {
+    + formatar(conteudo: String): String
+}
+
+class HTML implements FormatoLaudo {
+    + formatar(conteudo: String): String
+}
+
+class Texto implements FormatoLaudo {
+    + formatar(conteudo: String): String
+}
+
+class Observacao {
+    - texto: String
+    + Observacao(texto)
+    + setTexto(texto): void
+    + getTexto(): String
+    + criarMemento(): ObservacaoMemento
+    + restaurar(memento): void
+}
+
+class ObservacaoMemento {
+    - {final} estado: String
+    + ObservacaoMemento(estado)
+    + getEstado(): String
+}
+
+class HistoricoObservacao {
+    - historico: List<ObservacaoMemento>
+    + salvar(memento): void
+    + restaurar(indice): ObservacaoMemento
+    + getQuantidadeEstados(): int
+}
+}
+
+' ============================================
+' CHAIN OF RESPONSIBILITY PATTERN
+' ============================================
+rectangle "CHAIN OF RESPONSIBILITY" as CHAIN #FFF8E1 {
+interface Validador {
+    + validar(dados, tipoExame): boolean
+    + processar(dados, tipoExame): boolean
+    + setProximo(validador): Validador
+}
+
+abstract class ValidadorBase implements Validador {
+    # proximo: Validador
+    # tipoExame: TipoExame
+    --
+    + ValidadorBase(tipoExame)
+    + setProximo(validador): Validador
+    + validar(dados, tipoExame): boolean
+    # validarProximo(dados, tipoExame): boolean
+    + {abstract} processar(dados, tipoExame): boolean
+}
+
+class ValidacaoHemograma extends ValidadorBase {
+    + ValidacaoHemograma()
+    + processar(dados, tipoExame): boolean
+}
+
+class ValidacaoUltrassonografia extends ValidadorBase {
+    + ValidacaoUltrassonografia()
+    + processar(dados, tipoExame): boolean
+}
+
+class ValidacaoRessonancia extends ValidadorBase {
+    + ValidacaoRessonancia()
+    + processar(dados, tipoExame): boolean
+}
+
+class ValidacaoGlicemia extends ValidadorBase {
+    + ValidacaoGlicemia()
+    + processar(dados, tipoExame): boolean
+}
+
+class ValidacaoColesterol extends ValidadorBase {
+    + ValidacaoColesterol()
+    + processar(dados, tipoExame): boolean
+}
+
+class ValidacaoCreatinina extends ValidadorBase {
+    + ValidacaoCreatinina()
+    + processar(dados, tipoExame): boolean
+}
+}
+
+' ============================================
+' OBSERVER PATTERN
+' ============================================
+rectangle "OBSERVER PATTERN" as OBSERVER #E3F2FD {
+interface Observador {
+    + atualizar(mensagem: String): void
+}
+
+class EmailNotificador implements Observador {
+    - enderecoEmail: String
+    + EmailNotificador(email)
+    + atualizar(mensagem): void
+}
+
+class SmsNotificador implements Observador {
+    - numeroTelefone: String
+    + SmsNotificador(numero)
+    + atualizar(mensagem): void
+}
+
+class WhatsAppNotificador implements Observador {
+    - numeroWhatsApp: String
+    + WhatsAppNotificador(numero)
+    + atualizar(mensagem): void
+}
+}
+
+' ============================================
+' GESTÃO E UTILIDADES
+' ============================================
+rectangle "GESTÃO - FILA DE PRIORIDADE" as MANAGEMENT {
+class FilaPrioridadeExames {
+    - fila: List<ExameComPrioridade>
+    --
+    + FilaPrioridadeExames()
+    + adicionarExame(exame, prioridade): void
+    + proximoExame(): Exame
+    + temExames(): boolean
+    + getTamanho(): int
+    + exibirFila(): void
+    - encontrarUltimaPosicaoUrgente(): int
+}
+
+class ExameComPrioridade {
+    - exame: Exame
+    - prioridade: Prioridade
+    --
+    + ExameComPrioridade(exame, prioridade)
+    + getExame(): Exame
+    + getPrioridade(): Prioridade
+}
+}
+
+rectangle "SINGLETON PATTERN" as SINGLETON #E1F5FE {
+class GeradorNumeroExame {
+    - {static} instance: GeradorNumeroExame
+    - numeroAtual: int
+    --
+    - GeradorNumeroExame()
+    + {static} getInstance(): GeradorNumeroExame
+    + gerarNumero(): int
+}
+
+class ConfiguracaoSistema {
+    - {static} instancia: ConfiguracaoSistema
+    - propriedades: Properties
+    - {final} ARQUIVO_CONFIG: String
+    --
+    - ConfiguracaoSistema()
+    + {static synchronized} getInstance(): ConfiguracaoSistema
+    - carregarConfiguracoes(): void
+    + get(chave): String
+    + getDescontoConvenio(): double
+    + getDescontoIdoso(): double
+    + isNotificacaoEmailAtiva(): boolean
+}
+}
+
+rectangle "UTILITÁRIOS" as UTILS {
+class CarregadorCSV {
+    + {static} carregarPacientes(arquivo): List<Paciente>
+    + {static} carregarMedicos(arquivo): List<Medico>
+}
+
+class FormatadorTexto {
+    + {static} formatarTitleCase(texto): String
+}
+}
+
+' ============================================
+' FACADE PATTERN
+' ============================================
+rectangle "FACADE PATTERN" as FACADE #FFEBEE {
+class LaboratorioFacade {
+    - filaExames: FilaPrioridadeExames
+    - criadores: Map<String, CriadorExame>
+    - examesProcessados: List<Exame>
+    - medicosDisponiveis: List<Medico>
+    --
+    + LaboratorioFacade()
+    + setMedicosDisponiveis(medicos): void
+    + solicitarExame(paciente, tipo, prioridade, desconto, valor): Exame
+    + solicitarExame(paciente, tipo, prioridade, desconto, valor, indicadores): Exame
+    + processarProximoExame(): void
+    + gerarLaudo(exame, formato): String
+    + exibirFilaExames(): void
+    + temExamesNaFila(): boolean
+    + demonstrarHistoricoObservacoes(): void
+    - selecionarMedicoParaExame(tipo): Medico
+    - criarCadeiaValidacao(): Validador
+}
+
+class SistemaExamesMedicos {
+    + {static} main(args: String[]): void
+}
+}
+
+' ============================================
+' RELACIONAMENTOS PRINCIPAIS
+' ============================================
+
+' Relacionamentos do modelo
+Paciente ||--o{ Exame : contém
+Paciente ||--o{ Laudo : possui
+Medico ||--o{ Exame : solicita
+
+' Template Method - Factory Method
+CriadorHemograma ..> Hemograma : cria
+CriadorRessonanciaMagnetica ..> Ressonancia : cria
+CriadorUltrassonografia ..> Ultrassonografia : cria
+
+' Decorator Pattern
+IndicadorExame o-- Exame : decora
+
+' Strategy Pattern
+Exame o-- DescontoStrategy : usa
+
+' Bridge Pattern
+Laudo o-- FormatoLaudo : usa
+
+' Chain of Responsibility
+ValidadorBase ..|> Validador
+ValidadorBase o-- Validador : proximo
+
+' Observer Pattern
+Laudo o-- Observador : notifica
+
+' Memento Pattern
+Observacao ..> ObservacaoMemento : cria
+HistoricoObservacao o-- ObservacaoMemento : armazena
+Laudo o-- Observacao : contém
+
+' Fila de Prioridade
+FilaPrioridadeExames o-- ExameComPrioridade : gerencia
+ExameComPrioridade o-- Exame : contém
+ExameComPrioridade o-- Prioridade : possui
+
+' Facade Pattern
+LaboratorioFacade o-- FilaPrioridadeExames : usa
+LaboratorioFacade o-- CriadorExame : usa
+LaboratorioFacade ..> Laudo : cria
+LaboratorioFacade ..> Validador : usa
+
+' Singletons
+Exame ..> GeradorNumeroExame : usa
+DescontoConvenio ..> ConfiguracaoSistema : usa
+DescontoIdoso ..> ConfiguracaoSistema : usa
+
+' Sistema principal
+SistemaExamesMedicos ..> LaboratorioFacade : usa
+SistemaExamesMedicos ..> CarregadorCSV : usa
+
+' Enums
+Exame o-- TipoExame
+FilaPrioridadeExames o-- Prioridade
+
+@enduml

@@ -179,34 +179,6 @@ public class SistemaExamesMedicos {
         
         // Demonstrar o padrão Memento com histórico de observações
         laboratorio.demonstrarHistoricoObservacoes();
-        
-        
-        System.out.println("\n8. DEMONSTRAÇÃO DE PADRÕES IMPLEMENTADOS");
-        System.out.println("=========================================");
-        System.out.println("✅ Singleton: GeradorNumeroExame");
-        System.out.println("✅ Strategy: Descontos (Convênio 15%, Idoso 8%)");
-        System.out.println("✅ Factory Method: Criadores de Exame");
-        System.out.println("✅ Template Method: Execução de Exames");
-        System.out.println("✅ Chain of Responsibility: Validação de Dados");
-        System.out.println("✅ Bridge: Laudos e Formatos (PDF, HTML, Texto)");
-        System.out.println("✅ Observer: Notificações (Email, SMS, WhatsApp)");
-        System.out.println("✅ Memento: Histórico de Observações");
-        System.out.println("✅ Facade: Interface Simplificada do Laboratório");
-        System.out.println("✅ Priority Queue: Fila de Exames por Prioridade");
-        System.out.println("✅ Decorator: Indicadores em Exames Sanguíneos (Glicemia, Colesterol, Creatinina)");
-        
-        System.out.println("\n9. REQUISITOS FUNCIONAIS ATENDIDOS");
-        System.out.println("===================================");
-        System.out.println("✅ R1: Carregar dados de pacientes via CSV");
-        System.out.println("✅ R2: Sistema de prioridades (Urgente > Pouco Urgente > Rotina)");
-        System.out.println("✅ R3: Diferentes tipos de exame (Hemograma, Ultrassom, RM)");
-        System.out.println("✅ R4: Múltiplos formatos de laudo (PDF, HTML, Texto)");
-        System.out.println("✅ R5: Sistema de descontos (Convênio, Idoso)");
-        System.out.println("✅ R6: Validação de dados por tipo de exame");
-        System.out.println("✅ R7: Notificações automáticas multi-canal");
-        System.out.println("✅ R8: Histórico de modificações em observações");
-        System.out.println("✅ R9: Interface simplificada (Facade)");
-        
         System.out.println("\n=== SISTEMA EXECUTADO COM SUCESSO! ===");
     }
 }

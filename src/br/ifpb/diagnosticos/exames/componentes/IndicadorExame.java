@@ -10,7 +10,6 @@ import java.util.HashMap;
  */
 public abstract class IndicadorExame extends Exame {
     protected Exame exameBase;
-    private boolean exameBaseExecutado = false;
     
     public IndicadorExame(Exame exameBase) {
         super(exameBase.getPaciente(), exameBase.getValor());
@@ -27,24 +26,6 @@ public abstract class IndicadorExame extends Exame {
     @Override
     public double aplicarDesconto(double valor) {
         return exameBase.aplicarDesconto(valor);
-    }
-    
-    @Override
-    protected void prepararPaciente() {
-        if (!exameBaseExecutado) {
-            exameBase.realizarExame();
-            exameBaseExecutado = true;
-        }
-    }
-    
-    @Override
-    protected void realizarProcedimento() {
-        realizarAnaliseIndicador();
-    }
-    
-    @Override
-    protected void finalizarExame() {
-        System.out.println("Análise do indicador " + getNomeIndicador() + " concluída");
     }
     
     @Override

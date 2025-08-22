@@ -41,19 +41,6 @@ public abstract class Exame {
         return valor;
     }
     
-    public final void realizarExame() {
-        prepararPaciente();
-        realizarProcedimento();
-        finalizarExame();
-    }
-    
-    protected abstract void prepararPaciente();
-    protected abstract void realizarProcedimento();
-    
-    protected void finalizarExame() {
-        System.out.println("Exame " + this.getClass().getSimpleName() + " finalizado para paciente: " + paciente.getNome());
-    }
-    
     public void setDados(Map<String, Object> dados) {
         this.dados = dados;
     }

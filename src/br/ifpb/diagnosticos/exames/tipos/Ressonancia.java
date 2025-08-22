@@ -19,17 +19,4 @@ public class Ressonancia extends Exame {
         this.dados.put("impressao", "Exame normal");
 
     }
-    
-    @Override
-    protected void prepararPaciente() {
-        System.out.println("Preparando paciente para ressonância magnética");
-        System.out.println("Verificando contraindicações (marcapasso, implantes metálicos)");
-        System.out.println("Orientando sobre a permanência imóvel durante o exame");
-    }
-    
-    @Override
-    protected void realizarProcedimento() {
-        System.out.println("Realizando exame de ressonância magnética");
-        System.out.println("Capturando imagens detalhadas através de campo magnético");
-    }
 }
