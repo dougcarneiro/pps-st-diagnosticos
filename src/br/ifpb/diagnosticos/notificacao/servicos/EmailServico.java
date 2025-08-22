@@ -1,5 +1,6 @@
 package br.ifpb.diagnosticos.notificacao.servicos;
 
+import br.ifpb.diagnosticos.utils.ConfiguracaoSistema;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.util.Properties;
@@ -7,8 +8,9 @@ import java.util.Properties;
 public class EmailServico {
 
     public static void enviarEmail(String nome, String email, String mensagem) {
-        final String remetente = "douglas.carneiro@academico.ifpb.edu.br";
-        final String senha = "usar senha de app";
+        ConfiguracaoSistema config = ConfiguracaoSistema.getInstance();
+        final String remetente = config.getEmailRemetente();
+        final String senha = config.getEmailSenha();
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -24,16 +26,25 @@ public class EmailServico {
 
         try {
             MimeMessage message = new MimeMessage(session);
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("caio.soares@academico.ifpb.edu.br"));
+
+            // Decide o destinatário baseado na configuração de dev
+            String destinatario;
+            if (config.isNotificacaoEmailDev()) {
+                destinatario = "caio.soares@academico.ifpb.edu.br"; // Email para dev
+            } else {
+                destinatario = email; // Email real do paciente
+            }
+            
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject("Notificação ST Diagnósticos");
             message.setText("Olá " + nome + ",\n\n" + mensagem);
 
             Transport.send(message);
-            System.out.println("📧 Email enviado para " + nome);
+            System.out.println("📧 Email enviado para " + nome + " (" + destinatario + ")");
 
         } catch (MessagingException e) {
             e.printStackTrace();
-            System.out.println("📧 [Simulação] Email para " + nome + ": " + mensagem);
+            System.out.println("📧 [Simulação] Email para " + nome + " (" + email + "): " + mensagem);
         }
     }
 }

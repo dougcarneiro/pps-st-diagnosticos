@@ -44,8 +44,12 @@ public class ConfiguracaoSistema {
         propriedades.setProperty("desconto.convenio.percentual", "15");
         propriedades.setProperty("desconto.idoso.percentual", "8");
         
+        // Configurações de email
+        propriedades.setProperty("email.remetente", "douglas.carneiro@academico.ifpb.edu.br");
+        propriedades.setProperty("email.senha", "usar senha de app");
+        
         // Configurações de notificação
-        propriedades.setProperty("notificacao.email.ativo", "true");
+        propriedades.setProperty("notificacao.email.ativo", "dev");
         propriedades.setProperty("notificacao.sms.ativo", "true");
         propriedades.setProperty("notificacao.whatsapp.ativo", "true");
         
@@ -111,6 +115,14 @@ public class ConfiguracaoSistema {
         return getInt("desconto.idoso.percentual", 8);
     }
     
+    public String getEmailRemetente() {
+        return get("email.remetente", "douglas.carneiro@academico.ifpb.edu.br");
+    }
+    
+    public String getEmailSenha() {
+        return get("email.senha", "usar senha de app");
+    }
+    
     public String getNomeLaboratorio() {
         return get("laboratorio.nome", "ST DIAGNÓSTICOS");
     }
@@ -120,7 +132,13 @@ public class ConfiguracaoSistema {
     }
     
     public boolean isNotificacaoEmailAtiva() {
-        return getBoolean("notificacao.email.ativo", true);
+        String valor = get("notificacao.email.ativo", "dev");
+        return !valor.equals("false");
+    }
+    
+    public boolean isNotificacaoEmailDev() {
+        String valor = get("notificacao.email.ativo", "dev");
+        return valor.equals("dev");
     }
     
     public boolean isNotificacaoSmsAtiva() {
