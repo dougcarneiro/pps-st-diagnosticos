@@ -1,10 +1,43 @@
-# Sistema de Exames Médicos - ST Diagnósticos
+# Sistema de Gerenciamento de Exames - ST Diagnósticos
 
-## 📋 Visão Geral
+Este projeto visa atender às necessidades da ST Diagnósticos, oferecendo um sistema flexível, reutilizável e de fácil manutenção para gerenciamento de exames médicos, emissão de laudos e comunicação com pacientes. A solução foi desenvolvida com foco na aplicação de padrões de projeto para garantir extensibilidade e desacoplamento entre os componentes do sistema.
 
-Sistema completo de controle de exames médicos e emissão de laudos, implementando **9 padrões de projeto GoF** de forma integrada e profissional. O projeto demonstra arquitetura por domínio de negócio, sistema de configuração avançado, carregamento de dados via CSV e build automatizado.
+## Integrantes do Grupo
 
-**Status**: ✅ **100% Funcional** | **42 classes Java** | **9 Padrões GoF** | **9 Domínios organizados**
+| Nome               | Matrícula     |
+|--------------------|---------------|
+| Alessandro Rodrigues de Souza Júnior | 20231370009 |
+| Bruno Vinicius de Araujo Eneas | 20231370015 |
+| Caio Batista da Silva Soares | 20231370010 |
+| Douglas Emerson Ferreira Carneiro | 20231370002 |
+
+## Estrutura da Solução
+
+A arquitetura do sistema foi construída com base em diversos padrões de projeto. Cada requisito funcional foi analisado individualmente e resolvido com um ou mais padrões que melhor se aplicam ao cenário descrito.
+
+---
+
+## Diagrama de Classes
+![Diagrama UML](./docs/diagrama.svg)
+
+# Requisitos Funcionais e Padrões Aplicados
+
+## Tabela Resumo: Requisitos e Padrões de Projeto
+
+| Requisito | Descrição resumida                                                      | Padrão de Projeto Aplicado |
+|-----------|-------------------------------------------------------------------------|-----------------------------|
+| R1        | Carregar dados necessários a partir de arquivos CSV                    | Utility Class               |
+| R2        | Geração de número sequencial único para exames                         | Singleton                   |
+| R3        | Emitir laudos para exames: Sanguíneo, Raio-X e Ressonância Magnética  | Factory Method + Template Method + Decorator |
+| R4        | Geração de laudos em múltiplos formatos (texto, HTML, PDF, etc.)       | Bridge                      |
+| R5        | Validação extensível de exames                                          | Chain of Responsibility     |
+| R6        | Notificação ao paciente por e-mail (e futuramente SMS, Telegram)       | Observer                    |
+| R7        | Aplicação de políticas de desconto (convênio, idoso, etc.)             | Strategy                    |
+| R8        | Priorização de laudos usando lista de prioridade (URGENTE, POUCO URGENTE, ROTINA) | Priority Queue |
+| R9        | Programa principal simulando execução e atendimento dos requisitos     | Facade                      |
+| R10       | Controle de versões das observações médicas                            | Memento                     |
+
+---
 
 ## 🚀 Execução Rápida
 
@@ -20,126 +53,135 @@ make demo
 make help
 ```
 
-### Métodos Alternativos
-```bash
-# Script bash (legado)
-./scripts/executar.sh
+---
 
-# Execução manual
-./scripts/compilar.sh && java -cp build br.ifpb.diagnosticos.sistema.SistemaExamesMedicos
-```
+## Requisito R1 - Carregar os dados necessários a partir de arquivos CSV
 
-## 📦 Arquitetura por Domínio de Negócio
+**Padrão de Projeto Aplicado:** Utility Class
 
-O sistema utiliza **Domain-Driven Design (DDD)** com packages organizados por domínio de negócio:
+**Como será utilizado:**  
+A classe `CarregadorCSV` fornece métodos estáticos para carregar dados de pacientes, médicos solicitantes, médicos responsáveis pelo laudo e outros dados necessários a partir de arquivos CSV. Esta classe contém apenas métodos utilitários sem estado, seguindo o padrão de classe utilitária.
 
-```
-projeto/
-├── 📄 Makefile                  # Sistema de build automatizado
-├── 📁 src/br/ifpb/diagnosticos/ # Código fonte principal
-│   ├── 📋 modelo/               # Entidades (Paciente, Medico, Prioridade)
-│   ├── 🔬 exames/               # Domínio de exames médicos
-│   │   ├── tipos/               # Hemograma, Ultrassom, Ressonância
-│   │   └── criadores/           # Factory Methods
-│   ├── 📄 laudos/               # Domínio de laudos médicos
-│   │   ├── tipos/               # Laudos específicos por tipo
-│   │   └── formatos/            # PDF, HTML, Texto (Bridge)
-│   ├── ✅ validacao/            # Chain of Responsibility
-│   ├── 📧 notificacao/          # Observer Pattern
-│   ├── 💰 financeiro/           # Strategy Pattern (descontos)
-│   ├── 🎯 gestao/               # Priority Queue
-│   ├── 🏥 sistema/              # Facade + classes principais
-│   └── 🛠️ utils/               # Singleton, CSV, Configuração
-├── 📁 build/                    # Arquivos compilados (.class)
-├── 📁 config/                   # Configurações do sistema
-│   └── sistema.properties       # Configurações persistentes
-├── 📁 dados/                    # Arquivos CSV
-│   ├── pacientes.csv           # Dados de pacientes
-│   └── medicos.csv             # Dados de médicos
-└── 📄 scripts/                  # Scripts bash legados
-    ├── executar.sh             # Script original de execução
-    └── compilar.sh             # Script original de compilação
-```
+**Justificativa:**  
+Centraliza a lógica de carregamento de dados, promovendo reutilização e mantendo a responsabilidade bem definida para operações de I/O com arquivos CSV. Facilita a manutenção e permite carregar diferentes tipos de dados médicos de forma consistente.
 
-## 🎨 Padrões de Projeto Implementados (9 GoF)
+---
 
-### 1. **Singleton** - Gerador de Números + Configuração
-- **Package**: `utils`
-- **Classes**: `GeradorNumeroExame`, `ConfiguracaoSistema`
-- **Propósito**: Garantir instância única para numeração e configurações
+## Requisito R2 - Gerar o número sequencial do exame, sem repetição
 
-### 2. **Strategy** - Descontos Configuráveis
-- **Package**: `financeiro`
-- **Classes**: `DescontoStrategy`, `DescontoConvenio`, `DescontoIdoso`
-- **Propósito**: Aplicar diferentes políticas de desconto (configuráveis via properties)
+**Padrão de Projeto Aplicado:** Singleton
 
-### 3. **Factory Method** - Criação de Exames
-- **Package**: `exames.criadores`
-- **Classes**: `CriadorExame`, `CriadorHemograma`, etc.
-- **Propósito**: Criar diferentes tipos de exames sem acoplamento
+**Como será utilizado:**  
+Será criada a classe `GeradorNumeroExame`, responsável pela lógica de geração de identificadores únicos. Essa classe seguirá o padrão Singleton, garantindo que apenas uma instância exista durante toda a execução da aplicação.
 
-### 4. **Template Method** - Realização de Exames
-- **Package**: `exames`
-- **Classe**: `Exame` (método `realizarExame()`)
-- **Propósito**: Definir algoritmo padrão para execução de exames
+**Justificativa:**  
+Garante unicidade na geração dos números de exame, evitando conflitos, duplicações ou inconsistências, especialmente em ambientes concorrentes.
 
-### 5. **Chain of Responsibility** - Validação
-- **Package**: `validacao`
-- **Classes**: `Validador`, `ValidadorBase`, `ValidacaoHemograma`, etc.
-- **Propósito**: Validações sequenciais e extensíveis por tipo de exame
+---
 
-### 6. **Bridge** - Laudos e Formatos
-- **Packages**: `laudos` e `laudos.formatos`
-- **Classes**: `Laudo`, `FormatoLaudo`, `PDF`, `HTML`, `Texto`
-- **Propósito**: Separar abstração (laudo) da implementação (formato)
+## Requisito R3 - Emitir laudo dos exames: Sanguíneo, Raio-X e Ressonância Magnética
 
-### 7. **Observer** - Notificações Multi-canal
-- **Package**: `notificacao`
-- **Classes**: `Observador`, `EmailNotificador`, `SmsNotificador`, `WhatsAppNotificador`
-- **Propósito**: Notificações automáticas configuráveis
+**Padrão de Projeto Aplicado:** Factory Method + Template Method + Decorator
 
-### 8. **Memento** - Histórico de Observações
-- **Package**: `laudos`
-- **Classes**: `Observacao`, `ObservacaoMemento`, `HistoricoObservacao`
-- **Propósito**: Controle de versão das observações
+**Como será utilizado:**  
+- **Factory Method**: Cada tipo de exame (`Hemograma`, `Ultrassonografia`, `Ressonancia`) será instanciado por fábricas concretas (`CriadorHemograma`, `CriadorUltrassonografia`, `CriadorRessonanciaMagnetica`) que herdam da classe abstrata `CriadorExame`.
+- **Template Method**: A classe abstrata `Exame` define o algoritmo geral para realização de exames, com etapas específicas implementadas pelas subclasses.
+- **Decorator**: Para exames sanguíneos, indicadores específicos (`IndicadorGlicemia`, `IndicadorColesterol`, `IndicadorCreatinina`) podem ser adicionados dinamicamente ao exame base.
 
-### 9. **Facade** - Interface Simplificada
-- **Package**: `sistema`
-- **Classe**: `LaboratorioFacade`
-- **Propósito**: Interface unificada para operações complexas
+**Justificativa:**  
+A combinação desses padrões permite criar diferentes tipos de exames de forma desacoplada (Factory Method), seguir um fluxo padronizado (Template Method), e adicionar indicadores específicos para exames sanguíneos sem modificar a estrutura base (Decorator). Atende ao princípio Open/Closed.
 
-## Sistema de Build Automatizado
+---
 
-### Comandos Principais (Makefile)
+## Requisito R4 - Gerar laudos em diferentes formatos: texto puro, HTML e PDF
 
-| Comando | Descrição | Uso |
-|---------|-----------|-----|
-| `make run` | Compila e executa sistema | Uso diário |
-| `make demo` | Demonstração de configuração | Ver funcionalidades |
-| `make clean` | Limpa arquivos compilados | Manutenção |
-| `make info` | Informações do projeto | Status atual |
-| `make help` | Ajuda completa | Descobrir comandos |
+**Padrão de Projeto Aplicado:** Bridge
 
-### Comandos Avançados
+**Como será utilizado:**  
+Será criada a abstração `Laudo` (com subclasses como `LaudoHemograma`, `LaudoRessonanciaMagnetica`), que conterá uma referência a um objeto da interface `FormatoLaudo`. As classes concretas de formato (`PDF`, `HTML`, `Texto`) implementarão a lógica de geração no formato específico.
 
-```bash
-# Desenvolvimento
-make compile         # Apenas compilar
-make test            # Executar sistema + demo
-make start           # Equivalente ao executar.sh
+**Justificativa:**  
+Permite variar independentemente o conteúdo dos laudos e seu formato de saída. Facilita a adição de novos formatos (como JSON) sem alteração nas abstrações principais dos laudos.
 
-# Manutenção
-make clean           # Limpar build
-make clean-all       # Limpar tudo (build + config)
-make check           # Verificar ambiente Java
-make setup           # Criar estrutura de diretórios
-```
+---
+
+## Requisito R5 - Adicionar as regras de validação de cada exame, de maneira extensível
+
+**Padrão de Projeto Aplicado:** Chain of Responsibility
+
+**Como será utilizado:**  
+Cada regra de validação será encapsulada em classes que herdam de `ValidadorBase` (como `ValidacaoHemograma`, `ValidacaoUltrassonografia`, `ValidacaoRessonancia`, `ValidacaoGlicemia`, etc.). Esses validadores serão encadeados em uma cadeia, permitindo que cada um execute sua verificação e repasse o controle ao próximo.
+
+**Justificativa:**  
+Permite uma estrutura modular e flexível para validações. Novas regras podem ser adicionadas, removidas ou reorganizadas sem impactar o fluxo principal ou os validadores existentes. Cada tipo de exame pode ter suas validações específicas.
+
+---
+
+## Requisito R6 - Notificar o paciente quando um laudo for emitido, por e-mail
+
+**Padrão de Projeto Aplicado:** Observer
+
+**Como será utilizado:**  
+A classe `Laudo` atuará como sujeito (Subject), notificando observadores como `EmailNotificador`, `SmsNotificador`, `WhatsAppNotificador`. Ao emitir um laudo, todos os observadores registrados são automaticamente notificados.
+
+**Justificativa:**  
+Facilita a adição de novos mecanismos de notificação (SMS, Telegram) sem alterar a lógica de emissão de laudos, promovendo baixo acoplamento e alta extensibilidade.
+
+---
+
+## Requisito R7 - Aplicação de políticas de desconto para exames
+
+**Padrão de Projeto Aplicado:** Strategy
+
+**Como será utilizado:**  
+A lógica de desconto será encapsulada em classes concretas que implementam a interface `DescontoStrategy`, como `DescontoConvenio` (15%) e `DescontoIdoso` (8%). A classe `Exame` aplicará dinamicamente a estratégia adequada com base no perfil do paciente.
+
+**Justificativa:**  
+Encapsula políticas de desconto em componentes independentes e reutilizáveis. Facilita a manutenção e extensão da lógica de negócio (como "Outubro Rosa") sem impactar o sistema principal, além de permitir configuração dinâmica dos percentuais via `ConfiguracaoSistema`.
+
+---
+
+## Requisito R8 - Implementar priorização de laudos usando lista de prioridade
+
+**Padrão de Projeto Aplicado:** Priority Queue
+
+**Como será utilizado:**  
+A classe `FilaPrioridadeExames` gerencia exames encapsulados em `ExameComPrioridade` usando o enum `Prioridade` (EMERGENCIA, MUITO_URGENTE, URGENTE, POUCO_URGENTE, ROTINA). A fila garante o processamento de laudos mais críticos primeiro.
+
+**Justificativa:**  
+Abstrai a ordenação dos exames de acordo com a prioridade médica, tornando o sistema mais eficiente, legível e de fácil manutenção, seguindo protocolos hospitalares reais.
+
+---
+
+## Requisito R9 - Implementar programa principal simulando execução da aplicação
+
+**Padrão de Projeto Aplicado:** Facade
+
+**Como será utilizado:**  
+A classe `LaboratorioFacade` atuará como uma fachada, unificando funcionalidades como criação de exames, aplicação de descontos, geração de laudos, processamento da fila de prioridade e notificações. A classe principal `SistemaExamesMedicos` e outras camadas interagirão apenas com essa fachada.
+
+**Justificativa:**  
+Fornece uma interface simplificada para operações complexas, reduzindo o acoplamento entre subsistemas e facilitando integrações. Centraliza o controle do fluxo principal do sistema e demonstra todos os requisitos funcionais.
+
+---
+
+## Requisito R10 - Controle de versões das observações médicas nos exames
+
+**Padrão de Projeto Aplicado:** Memento
+
+**Como será utilizado:**  
+A classe `HistoricoObservacao` armazenará versões anteriores das observações através de `ObservacaoMemento`. A classe `Observacao` poderá criar mementos e restaurar qualquer versão salva antes da finalização do laudo.
+
+**Justificativa:**  
+Oferece suporte à reversão de alterações e versionamento, o que é essencial em sistemas sensíveis como laudos médicos. Permite rastreabilidade e auditoria das modificações feitas durante a elaboração dos laudos.
+
+---
 
 ## 🔧 Funcionalidades Avançadas
 
 ### 💾 Sistema de Configuração
 - **Arquivo**: `config/sistema.properties`
-- **Recursos**: Caminhos CSV, percentuais de desconto, dados do laboratório
+- **Recursos**: Caminhos CSV, percentuais de desconto, dados do laboratório, configurações de email
 - **Persistência**: Configurações salvas automaticamente
 - **Flexibilidade**: Modificação dinâmica via `ConfiguracaoSistema`
 
@@ -149,7 +191,9 @@ csv.pacientes.caminho=dados/pacientes.csv
 csv.medicos.caminho=dados/medicos.csv
 desconto.convenio.percentual=15
 desconto.idoso.percentual=8
-laboratorio.nome=ST DIAGNÓSTICOS
+email.remetente=douglas.carneiro@academico.ifpb.edu.br
+email.destinoDev=caio.soares@academico.ifpb.edu.br
+notificacao.email.ativo=dev
 ```
 
 ### 📁 Carregamento de Dados CSV
@@ -158,187 +202,22 @@ laboratorio.nome=ST DIAGNÓSTICOS
 - **Auto-criação**: Arquivos de exemplo criados automaticamente
 - **Robustez**: Tratamento de erros e validação de dados
 
-### 📊 Demonstrações Disponíveis
-
-#### Sistema Principal (`make run`)
-- Carregamento de 5 pacientes e 5 médicos via CSV
-- Solicitação de 4 exames com diferentes prioridades
-- Aplicação de descontos (Convênio 15%, Idoso 8%)
-- Processamento por ordem de prioridade (URGENTE → POUCO_URGENTE → ROTINA)
-- Geração de laudos em múltiplos formatos (PDF, HTML, Texto)
-- Notificações automáticas (Email, SMS, WhatsApp)
-- Validação específica por tipo de exame
-- Histórico de modificações em observações
-
-#### Demo de Configuração (`make demo`)
-- Exibição de configurações atuais
-- Modificação dinâmica de parâmetros
-- Persistência de alterações
-- Carregamento usando configurações
-- Restauração de configurações originais
-
-## 🎯 Vantagens da Arquitetura por Domínio
-
-### ✅ Organização Profissional
-- **Coesão Alta**: Classes relacionadas ficam juntas por contexto de negócio
-- **Baixo Acoplamento**: Separação clara entre responsabilidades
-- **Manutenibilidade**: Mudanças isoladas por domínio específico
-
-### ✅ Escalabilidade e Flexibilidade
-- **Novos Exames**: Adicionar facilmente em `exames.tipos`
-- **Novos Formatos**: Expandir `laudos.formatos` conforme necessário
-- **Novas Validações**: Estender `validacao` sem impacto
-- **Novas Notificações**: Incluir em `notificacao` de forma isolada
-
-### ✅ Compreensão do Negócio
-- **Estrutura Intuitiva**: Reflete o domínio real do laboratório
-- **Documentação Viva**: Código autodocumentado pela organização
-- **Onboarding Rápido**: Novos desenvolvedores entendem facilmente
-
 ## 📊 Mapeamento Domínio → Padrões
 
 | Domínio | Padrões Aplicados | Responsabilidade |
 |---------|-------------------|------------------|
-| **modelo** | Entities, Value Objects | Entidades de negócio |
-| **exames** | Factory Method, Template Method | Criação e execução de exames |
-| **laudos** | Bridge, Memento | Geração e versionamento |
-| **validacao** | Chain of Responsibility | Validações por tipo |
+| **modelo** | Entities, Enums | Entidades de negócio (Paciente, Medico, Prioridade, TipoExame) |
+| **exames** | Factory Method, Template Method, Decorator | Criação, execução e decoração de exames |
+| **laudos** | Bridge, Memento, Observer | Geração, versionamento e notificação |
+| **validacao** | Chain of Responsibility | Validações por tipo e indicador |
 | **notificacao** | Observer | Comunicação multi-canal |
-| **financeiro** | Strategy | Políticas de desconto |
-| **gestao** | Priority Queue | Gerenciamento de filas |
-| **sistema** | Facade | Interface simplificada |
-| **utils** | Singleton | Utilitários compartilhados |
+| **financeiro** | Strategy | Políticas de desconto configuráveis |
+| **gestao** | Priority Queue | Gerenciamento de filas por prioridade |
+| **sistema** | Facade | Interface simplificada para operações complexas |
+| **utils** | Singleton, Utility Classes | Configurações e utilitários compartilhados |
 
-## 🔧 Extensibilidade Prática
+---
 
-### Novo Tipo de Exame
-```java
-// 1. Criar tipo em exames.tipos
-package br.ifpb.diagnosticos.exames.tipos;
-public class Tomografia extends Exame {
-    @Override
-    protected void prepararPaciente() { /* específico */ }
-    @Override  
-    protected void realizarExameEspecifico() { /* específico */ }
-}
+## Conclusão
 
-// 2. Criar factory em exames.criadores
-package br.ifpb.diagnosticos.exames.criadores;
-public class CriadorTomografia extends CriadorExame {
-    @Override
-    public Exame criarExame(/* params */) {
-        return new Tomografia(/* params */);
-    }
-}
-
-// 3. Criar validação em validacao
-package br.ifpb.diagnosticos.validacao;
-public class ValidacaoTomografia extends ValidadorBase { /* regras */ }
-
-// 4. Criar laudo em laudos.tipos
-package br.ifpb.diagnosticos.laudos.tipos;
-public class LaudoTomografia extends Laudo { /* específico */ }
-```
-
-### Novo Formato de Saída
-```java
-package br.ifpb.diagnosticos.laudos.formatos;
-public class JSON implements FormatoLaudo {
-    @Override
-    public String formatarCabecalho(String laboratorio, String data) { /* JSON */ }
-    @Override
-    public String formatarDadosPaciente(/* params */) { /* JSON */ }
-    // ... outros métodos
-}
-```
-
-## 🚀 Requisitos Funcionais Atendidos
-
-| Requisito | Status | Implementação |
-|-----------|--------|---------------|
-| **R1** - Carregamento CSV | ✅ | `CarregadorCSV` com pacientes e médicos |
-| **R2** - Sistema de Prioridades | ✅ | `FilaPrioridadeExames` (URGENTE → ROTINA) |
-| **R3** - Tipos de Exame | ✅ | Hemograma, Ultrassom, Ressonância |
-| **R4** - Formatos de Laudo | ✅ | PDF, HTML, Texto (Bridge Pattern) |
-| **R5** - Sistema de Descontos | ✅ | Convênio 15%, Idoso 8% (configurável) |
-| **R6** - Validação de Dados | ✅ | Chain of Responsibility por tipo |
-| **R7** - Notificações | ✅ | Email, SMS, WhatsApp (Observer) |
-| **R8** - Histórico | ✅ | Memento para observações |
-| **R9** - Interface Simplificada | ✅ | LaboratorioFacade |
-
-## 📈 Métricas do Projeto
-
-- **📁 Classes Java**: 42 arquivos organizados
-- **🎨 Padrões GoF**: 9 implementados corretamente
-- **📦 Domínios**: 9 packages por área de negócio
-- **🔧 Configurações**: Sistema completo de properties
-- **📊 CSV**: Carregamento de pacientes e médicos
-- **🛠️ Build**: Makefile com 11 comandos
-
-## 🎯 Exemplos de Saída
-
-### Execução do Sistema (`make run`)
-```
-=== SISTEMA DE EXAMES MÉDICOS - ST DIAGNÓSTICOS ===
-
-0. CARREGAMENTO DE DADOS
-========================
-Carregados 5 pacientes do arquivo dados/pacientes.csv
-Carregados 5 médicos do arquivo dados/medicos.csv
-
-Médicos disponíveis:
-- Dr(a). Dr. João Silva (CRM: 12345) - Clínico Geral
-- Dr(a). Dr. Maria Santos (CRM: 67890) - Radiologista
-
-1. SOLICITAÇÃO DE EXAMES
-========================
-Valor original: R$ 80.0 - Valor com desconto: R$ 68.0
-Exame HEMOGRAMA solicitado para João Silva
-
-2. FILA DE EXAMES (Priority Queue)
-===================================
-1. Ressonancia - Paciente: Maria Santos - Prioridade: URGENTE
-2. Ultrassonografia - Paciente: Pedro - Prioridade: POUCO_URGENTE
-
-3. PROCESSAMENTO DOS EXAMES (Template Method)
-==============================================
-Processando exame de Ressonância Magnética...
-
-4. GERAÇÃO DE LAUDOS (Bridge + Memento + Observer)
-==================================================
-=== FORMATO PDF ===
-LABORATÓRIO ST DIAGNÓSTICOS
-Paciente: Maria Santos - Idade: 72
-TIPO: RESSONÂNCIA MAGNÉTICA
-[...detalhes do laudo...]
-
-📧 Email enviado para Maria Santos
-📱 SMS enviado para (11) 99999-9999
-```
-
-## 🛡️ Qualidade e Padrões
-
-### ✅ Princípios SOLID
-- **S**ingle Responsibility: Cada classe tem uma responsabilidade
-- **O**pen/Closed: Extensível sem modificar código existente
-- **L**iskov Substitution: Subclasses substituem classes base
-- **I**nterface Segregation: Interfaces específicas por necessidade
-- **D**ependency Inversion: Dependências por abstrações
-
-### ✅ Clean Code
-- **Nomes Descritivos**: Classes e métodos autoexplicativos
-- **Métodos Pequenos**: Responsabilidades bem definidas
-- **Comentários Úteis**: Javadoc e explicações de negócio
-- **Organização**: Estrutura consistente e lógica
-
-## 🏆 Conclusão
-
-Este projeto demonstra a implementação profissional de **9 padrões GoF** em um sistema real de exames médicos. A arquitetura por domínio de negócio, combinada com o sistema de configuração avançado e build automatizado, resulta em:
-
-- ✅ **Código Profissional**: Organizado, testável e manutenível
-- ✅ **Padrões Aplicados**: Implementação correta e integrada
-- ✅ **Sistema Completo**: Do carregamento CSV até notificações
-- ✅ **Arquitetura Sólida**: Domain-Driven Design aplicado
-- ✅ **Ferramentas Modernas**: Build automatizado e configuração flexível
-
-**Sistema 100% funcional e pronto para evolução!** 🚀
+Este projeto demonstra como a aplicação adequada de padrões de projeto proporciona uma arquitetura robusta, extensível e de fácil manutenção. Cada requisito foi implementado com foco em boas práticas de orientação a objetos, favorecendo reutilização, clareza e desacoplamento. A integração de múltiplos padrões cria um sistema coeso que atende às necessidades reais de um laboratório médico, com capacidade de evolução e adaptação a novos requisitos.

@@ -127,6 +127,3 @@ help:
 	@echo "  make demo           - Ver demonstração de configuração"
 	@echo "  make clean run      - Limpar e recompilar"
 	@echo ""
-	@echo "Scripts legados (na pasta scripts/):"
-	@echo "  ./scripts/executar.sh  - Script bash original"
-	@echo "  ./scripts/compilar.sh  - Script de compilação original"
