@@ -1,6 +1,4 @@
 # Makefile para Sistema de Exames Médicos - ST Diagnósticos
-# Versão: 2.0
-# Data: 07/08/2025
 
 # Configurações
 JAVA_SRC_DIR = src

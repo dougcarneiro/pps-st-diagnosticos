@@ -70,10 +70,6 @@ abstract class Exame {
     # tipoExame: TipoExame
     --
     + Exame(paciente, valor)
-    + {final} realizarExame(): void
-    # {abstract} prepararPaciente(): void
-    # {abstract} realizarProcedimento(): void
-    # finalizarExame(): void
     + setDescontoStrategy(strategy): void
     + aplicarDesconto(valor): double
     + getCodigo(): int
@@ -84,20 +80,14 @@ abstract class Exame {
 
 class Hemograma extends Exame {
     + Hemograma(paciente, valor)
-    # prepararPaciente(): void
-    # realizarProcedimento(): void
 }
 
 class Ressonancia extends Exame {
     + Ressonancia(paciente, valor)
-    # prepararPaciente(): void
-    # realizarProcedimento(): void
 }
 
 class Ultrassonografia extends Exame {
     + Ultrassonografia(paciente, valor)
-    # prepararPaciente(): void
-    # realizarProcedimento(): void
 }
 
 abstract class CriadorExame {
@@ -196,6 +186,7 @@ abstract class Laudo {
     # formato: FormatoLaudo
     # exame: Exame
     # observacao: Observacao
+    # historicoObservacao: HistoricoObservacao
     # validadorInicial: Validador
     # observadores: List<Observador>
     --
@@ -459,7 +450,6 @@ Exame o-- DescontoStrategy : usa
 Laudo o-- FormatoLaudo : usa
 
 ' Chain of Responsibility
-ValidadorBase ..|> Validador
 ValidadorBase o-- Validador : proximo
 
 ' Observer Pattern
