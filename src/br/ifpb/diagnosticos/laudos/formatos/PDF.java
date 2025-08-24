@@ -10,4 +10,40 @@ public class PDF implements FormatoLaudo {
                conteudo + 
                "\n=== FIM PDF ===";
     }
+
+    /**
+     * Gera um arquivo PDF com as informações do exame, laudo e paciente.
+     * @param conteudo Texto a ser inserido no PDF
+     * @param nomeExame Nome do exame
+     * @param nomePaciente Nome do paciente
+     * @return Caminho do arquivo gerado
+     */
+    public String gerarPDF(String conteudo, String nomeExame, String nomePaciente) {
+        String nomeArquivo = nomeExame + "_" + nomePaciente + ".pdf";
+        String caminho = "docs/" + nomeArquivo;
+        try {
+            org.apache.pdfbox.pdmodel.PDDocument document = new org.apache.pdfbox.pdmodel.PDDocument();
+            org.apache.pdfbox.pdmodel.PDPage page = new org.apache.pdfbox.pdmodel.PDPage();
+            document.addPage(page);
+            org.apache.pdfbox.pdmodel.PDPageContentStream contentStream = new org.apache.pdfbox.pdmodel.PDPageContentStream(document, page);
+            contentStream.beginText();
+            org.apache.pdfbox.pdmodel.font.PDType1Font font = new org.apache.pdfbox.pdmodel.font.PDType1Font(org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA_BOLD);
+            contentStream.setFont(font, 14);
+            contentStream.setLeading(16f);
+            contentStream.newLineAtOffset(50, 700);
+            String[] linhas = conteudo.split("\n");
+            for (String linha : linhas) {
+                contentStream.showText(linha);
+                contentStream.newLine();
+            }
+            contentStream.endText();
+            contentStream.close();
+            document.save(caminho);
+            document.close();
+            return caminho;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

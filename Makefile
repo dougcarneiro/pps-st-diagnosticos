@@ -26,7 +26,7 @@ check:
 		echo "❌ Compilador Java não encontrado. Instale o JDK."; \
 		exit 1; \
 	fi
-	@echo "✅ Java encontrado: $$(java -version 2>&1 | head -n 1)"
+	@echo " Java encontrado: $$(java -version 2>&1 | head -n 1)"
 
 # Setup inicial do projeto
 setup: check
@@ -34,7 +34,7 @@ setup: check
 	@mkdir -p $(BUILD_DIR)
 	@mkdir -p dados
 	@mkdir -p config
-	@echo "✅ Estrutura criada com sucesso!"
+	@echo " Estrutura criada com sucesso!"
 
 # Compilar o projeto
 compile: check setup
@@ -43,7 +43,7 @@ compile: check setup
 	@find $(JAVA_SRC_DIR) -name "*.java" > sources.tmp
 	@javac -cp "$(LIB_DIR)/*" -d $(BUILD_DIR) @sources.tmp
 	@if [ $$? -eq 0 ]; then \
-		echo "✅ Compilação bem-sucedida!"; \
+		echo " Compilação bem-sucedida!"; \
 		echo "📁 Arquivos .class criados em: $(BUILD_DIR)/"; \
 		rm -f sources.tmp; \
 	else \
@@ -79,13 +79,13 @@ clean:
 	@echo "🧹 Limpando arquivos compilados..."
 	@rm -rf $(BUILD_DIR)
 	@rm -f sources.tmp
-	@echo "✅ Limpeza concluída!"
+	@echo " Limpeza concluída!"
 
 # Limpar tudo (incluindo configurações)
 clean-all: clean
 	@echo "🧹 Limpando configurações e dados..."
 	@rm -rf config/*.properties
-	@echo "✅ Limpeza completa concluída!"
+	@echo " Limpeza completa concluída!"
 
 # Mostrar informações do projeto
 info:
@@ -98,7 +98,7 @@ info:
 	@echo "Classe Demo: $(DEMO_CLASS)"
 	@echo ""
 	@if [ -d $(BUILD_DIR) ]; then \
-		echo "✅ Projeto compilado"; \
+		echo " Projeto compilado"; \
 	else \
 		echo "⚠️  Projeto não compilado"; \
 	fi

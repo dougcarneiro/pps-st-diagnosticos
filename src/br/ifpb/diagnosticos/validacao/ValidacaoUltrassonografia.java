@@ -28,7 +28,7 @@ public class ValidacaoUltrassonografia extends ValidadorBase {
             return false;
         }
         
-        System.out.println("✅ Validação de Ultrassonografia passou");
+        System.out.println(" Validação de Ultrassonografia passou");
         return validarProximo(dados, tipoExame);
     }
 }

@@ -36,7 +36,7 @@ public class LaudoHemograma extends Laudo {
                 } else if (hemoglobina > 18.0) {
                     dados.append("⚠️ ACIMA DO NORMAL\n");
                 } else {
-                    dados.append("✅ DENTRO DO NORMAL\n");
+                    dados.append(" DENTRO DO NORMAL\n");
                 }
                 dados.append("\n");
                 dadosExame.remove("hemoglobina");
@@ -52,7 +52,7 @@ public class LaudoHemograma extends Laudo {
                 } else if (hematocritos > 50.0) {
                     dados.append("⚠️ ACIMA DO NORMAL\n");
                 } else {
-                    dados.append("✅ DENTRO DO NORMAL\n");
+                    dados.append(" DENTRO DO NORMAL\n");
                 }
                 dados.append("\n");
                 dadosExame.remove("hematocritos");
@@ -68,7 +68,7 @@ public class LaudoHemograma extends Laudo {
                 } else if (leucocitos > 11000) {
                     dados.append("⚠️ ACIMA DO NORMAL\n");
                 } else {
-                    dados.append("✅ DENTRO DO NORMAL\n");
+                    dados.append(" DENTRO DO NORMAL\n");
                 }
                 dados.append("\n");
                 dadosExame.remove("leucocitos");

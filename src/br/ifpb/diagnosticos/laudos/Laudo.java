@@ -53,28 +53,52 @@ public abstract class Laudo {
     // Template method para geração do laudo
     public final String gerarLaudo() {
         StringBuilder conteudo = new StringBuilder();
-        
+
         // Passo 1: Cabeçalho
         conteudo.append(gerarCabecalho());
-        
+
         // Passo 2: Dados do paciente
         conteudo.append(gerarDadosPaciente());
-        
+
         // Passo 3: Dados do exame (implementado pelas subclasses)
         conteudo.append(gerarDadosExame());
-        
+
         // Passo 4: Observações
         conteudo.append(gerarObservacoes());
-        
+
         // Passo 5: Rodapé
         conteudo.append(gerarRodape());
-        
+
         // Aplicar formato
         String laudoFormatado = formato.formatar(conteudo.toString());
-        
+
+
+        // Gerar arquivo e enviar como anexo se formato for PDF ou HTML
+        String caminhoAnexo = null;
+        String nomeExame = exame.getClass().getSimpleName();
+        String nomePaciente = exame.getPaciente().getNome().replaceAll("\\s+", "_");
+        String mensagemEmail;
+        if (formato instanceof br.ifpb.diagnosticos.laudos.formatos.PDF) {
+            caminhoAnexo = ((br.ifpb.diagnosticos.laudos.formatos.PDF)formato).gerarPDF(conteudo.toString(), nomeExame, nomePaciente);
+            mensagemEmail = "Laudo gerado para paciente: " + exame.getPaciente().getNome();
+        } else if (formato instanceof br.ifpb.diagnosticos.laudos.formatos.HTML) {
+            caminhoAnexo = ((br.ifpb.diagnosticos.laudos.formatos.HTML)formato).gerarHTML(conteudo.toString(), nomeExame, nomePaciente);
+            mensagemEmail = "Laudo gerado para paciente: " + exame.getPaciente().getNome();
+        } else {
+            // Formato texto: envia o laudo no corpo do e-mail
+            mensagemEmail = laudoFormatado;
+        }
+
         // Notificar observadores
-        notificarObservadores("Laudo gerado para paciente: " + exame.getPaciente().getNome());
-        
+        for (Observador observador : observadores) {
+            if (observador instanceof br.ifpb.diagnosticos.notificacao.EmailNotificador) {
+                ((br.ifpb.diagnosticos.notificacao.EmailNotificador)observador)
+                    .atualizar(exame.getPaciente().getNome(), mensagemEmail, caminhoAnexo);
+            } else {
+                observador.atualizar(exame.getPaciente().getNome(), mensagemEmail);
+            }
+        }
+
         return laudoFormatado;
     }
     

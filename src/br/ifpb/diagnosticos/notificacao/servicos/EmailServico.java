@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class EmailServico {
 
-    public static void enviarEmail(String nome, String email, String mensagem) {
+    public static void enviarEmail(String nome, String email, String mensagem, String caminhoPdf) {
         ConfiguracaoSistema config = ConfiguracaoSistema.getInstance();
         final String remetente = config.getEmailRemetente();
         final String senha = config.getEmailSenha();
@@ -37,7 +37,27 @@ public class EmailServico {
             
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject("Notificação ST Diagnósticos");
-            message.setText("Olá " + nome + ",\n\n" + mensagem);
+
+            // Corpo do email
+            MimeBodyPart textoBodyPart = new MimeBodyPart();
+            textoBodyPart.setText("Olá " + nome + ",\n\n" + mensagem);
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(textoBodyPart);
+
+            // Anexo PDF
+            if (caminhoPdf != null && !caminhoPdf.isEmpty()) {
+                try {
+                    MimeBodyPart anexoBodyPart = new MimeBodyPart();
+                    anexoBodyPart.attachFile(caminhoPdf);
+                    multipart.addBodyPart(anexoBodyPart);
+                } catch (java.io.IOException ioe) {
+                    ioe.printStackTrace();
+                    System.out.println("Erro ao anexar PDF: " + caminhoPdf);
+                }
+            }
+
+            message.setContent(multipart);
 
             Transport.send(message);
             System.out.println("📧 Email enviado para " + nome + " (" + destinatario + ")");

@@ -14,8 +14,13 @@ public class EmailNotificador implements Observador {
     
     @Override
     public void atualizar(String nome, String mensagem) {
-        EmailServico.enviarEmail(nome, enderecoEmail, mensagem);
-        System.out.println("📧 Email enviado para " + enderecoEmail + ": " + mensagem);
+        atualizar(nome, mensagem, null);
+    }
+
+    // Novo método para enviar com PDF
+    public void atualizar(String nome, String mensagem, String caminhoPdf) {
+        EmailServico.enviarEmail(nome, enderecoEmail, mensagem, caminhoPdf);
+        System.out.println("📧 Email enviado para " + enderecoEmail + ": " + mensagem + (caminhoPdf != null ? " [PDF anexado]" : ""));
     }
     
     public String getEnderecoEmail() {
