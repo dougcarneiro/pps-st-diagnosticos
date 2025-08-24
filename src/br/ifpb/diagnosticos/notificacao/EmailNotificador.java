@@ -17,10 +17,9 @@ public class EmailNotificador implements Observador {
         atualizar(nome, mensagem, null);
     }
 
-    // Novo método para enviar com PDF
-    public void atualizar(String nome, String mensagem, String caminhoPdf) {
-        EmailServico.enviarEmail(nome, enderecoEmail, mensagem, caminhoPdf);
-        System.out.println("📧 Email enviado para " + enderecoEmail + ": " + mensagem + (caminhoPdf != null ? " [PDF anexado]" : ""));
+    public void atualizar(String nome, String mensagem, String caminhoAnexo) {
+        EmailServico.enviarEmail(nome, enderecoEmail, mensagem, caminhoAnexo);
+        System.out.println("📧 Email enviado para " + enderecoEmail + ": " + mensagem + (caminhoAnexo != null ? " [Arquivo Anexado]" : ""));
     }
     
     public String getEnderecoEmail() {

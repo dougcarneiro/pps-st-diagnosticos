@@ -4,6 +4,9 @@ package br.ifpb.diagnosticos.laudos.formatos;
  * Implementação para formato PDF (Bridge Pattern)
  */
 public class PDF implements FormatoLaudo {
+
+    private static final String DIRETORIO_DESTINO = "output/";
+
     @Override
     public String formatar(String conteudo) {
         return "=== FORMATO PDF ===\n" + 
@@ -20,7 +23,7 @@ public class PDF implements FormatoLaudo {
      */
     public String gerarPDF(String conteudo, String nomeExame, String nomePaciente) {
         String nomeArquivo = nomeExame + "_" + nomePaciente + ".pdf";
-        String caminho = "docs/" + nomeArquivo;
+        String caminho = DIRETORIO_DESTINO + nomeArquivo;
         try {
             org.apache.pdfbox.pdmodel.PDDocument document = new org.apache.pdfbox.pdmodel.PDDocument();
             org.apache.pdfbox.pdmodel.PDPage page = new org.apache.pdfbox.pdmodel.PDPage();

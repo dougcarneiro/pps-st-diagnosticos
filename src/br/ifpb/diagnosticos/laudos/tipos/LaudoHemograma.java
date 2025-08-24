@@ -32,11 +32,11 @@ public class LaudoHemograma extends Laudo {
                 dados.append("Referência: 12,0 - 16,0 g/dL (mulheres), 14,0 - 18,0 g/dL (homens)\n");
                 
                 if (hemoglobina < 12.0) {
-                    dados.append("⚠️ ABAIXO DO NORMAL\n");
+                    dados.append("[!] ABAIXO DO NORMAL\n");
                 } else if (hemoglobina > 18.0) {
-                    dados.append("⚠️ ACIMA DO NORMAL\n");
+                    dados.append("[!] ACIMA DO NORMAL\n");
                 } else {
-                    dados.append(" DENTRO DO NORMAL\n");
+                    dados.append("[OK] DENTRO DO NORMAL\n");
                 }
                 dados.append("\n");
                 dadosExame.remove("hemoglobina");
@@ -48,11 +48,11 @@ public class LaudoHemograma extends Laudo {
                 dados.append("Referência: 36,0 - 46,0% (mulheres), 41,0 - 50,0% (homens)\n");
                 
                 if (hematocritos < 36.0) {
-                    dados.append("⚠️ ABAIXO DO NORMAL\n");
+                    dados.append("[!] ABAIXO DO NORMAL\n");
                 } else if (hematocritos > 50.0) {
-                    dados.append("⚠️ ACIMA DO NORMAL\n");
+                    dados.append("[!] ACIMA DO NORMAL\n");
                 } else {
-                    dados.append(" DENTRO DO NORMAL\n");
+                    dados.append("[OK] DENTRO DO NORMAL\n");
                 }
                 dados.append("\n");
                 dadosExame.remove("hematocritos");
@@ -64,11 +64,11 @@ public class LaudoHemograma extends Laudo {
                 dados.append("Referência: 4.000 - 11.000 /mm³\n");
                 
                 if (leucocitos < 4000) {
-                    dados.append("⚠️ ABAIXO DO NORMAL\n");
+                    dados.append("[!] ABAIXO DO NORMAL\n");
                 } else if (leucocitos > 11000) {
-                    dados.append("⚠️ ACIMA DO NORMAL\n");
+                    dados.append("[!] ACIMA DO NORMAL\n");
                 } else {
-                    dados.append(" DENTRO DO NORMAL\n");
+                    dados.append("[OK] DENTRO DO NORMAL\n");
                 }
                 dados.append("\n");
                 dadosExame.remove("leucocitos");

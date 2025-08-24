@@ -40,7 +40,7 @@ public class ValidacaoRessonancia extends ValidadorBase {
             return false;
         }
         
-        System.out.println(" Validação de Ressonância Magnética passou");
+        System.out.println("✅ Validação de Ressonância Magnética passou");
         return validarProximo(dados, tipoExame);
     }
 }

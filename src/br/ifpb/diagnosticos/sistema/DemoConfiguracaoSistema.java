@@ -36,7 +36,7 @@ public class DemoConfiguracaoSistema {
         config.set("desconto.idoso.percentual", "12");
         config.set("laboratorio.nome", "LABORATÓRIO DEMO");
         config.salvarConfiguracoes();
-        System.out.println(" Configurações modificadas e salvas!");
+        System.out.println("✅ Configurações modificadas e salvas!");
         
         // Exibir configurações modificadas
         System.out.println("\n📋 CONFIGURAÇÕES APÓS MODIFICAÇÃO:");
@@ -73,16 +73,16 @@ public class DemoConfiguracaoSistema {
         config.set("desconto.idoso.percentual", "8");
         config.set("laboratorio.nome", "ST DIAGNÓSTICOS");
         config.salvarConfiguracoes();
-        System.out.println(" Configurações originais restauradas!");
+        System.out.println("✅ Configurações originais restauradas!");
         
         System.out.println("\n🎯 DEMONSTRAÇÃO CONCLUÍDA COM SUCESSO!");
         System.out.println("=====================================");
         System.out.println("O sistema de configuração permite:");
-        System.out.println("-  Configurar caminhos de arquivos CSV");
-        System.out.println("-  Ajustar percentuais de desconto");
-        System.out.println("-  Personalizar dados do laboratório");
-        System.out.println("-  Ativar/desativar notificações");
-        System.out.println("-  Persistir alterações em arquivo");
-        System.out.println("-  Métodos de conveniência para carregamento");
+        System.out.println("- ✅ Configurar caminhos de arquivos CSV");
+        System.out.println("- ✅ Ajustar percentuais de desconto");
+        System.out.println("- ✅ Personalizar dados do laboratório");
+        System.out.println("- ✅ Ativar/desativar notificações");
+        System.out.println("- ✅ Persistir alterações em arquivo");
+        System.out.println("- ✅ Métodos de conveniência para carregamento");
     }
 }

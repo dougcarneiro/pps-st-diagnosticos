@@ -4,6 +4,9 @@ package br.ifpb.diagnosticos.laudos.formatos;
  * Implementação para formato HTML (Bridge Pattern)
  */
 public class HTML implements FormatoLaudo {
+
+    private static final String DIRETORIO_DESTINO = "output/";
+
     @Override
     public String formatar(String conteudo) {
         return "<html><head><title>Laudo Médico</title></head><body>" +
@@ -20,7 +23,7 @@ public class HTML implements FormatoLaudo {
      */
     public String gerarHTML(String conteudo, String nomeExame, String nomePaciente) {
         String nomeArquivo = nomeExame + "_" + nomePaciente + ".html";
-        String caminho = "docs/" + nomeArquivo;
+        String caminho = DIRETORIO_DESTINO + nomeArquivo;
         String html = "<html><head><title>Laudo Médico</title>"
             + "<style>body{font-family:sans-serif;} h1{color:#2a5d84;} table{border-collapse:collapse;width:100%;margin:20px 0;} th,td{border:1px solid #ccc;padding:8px;} th{background:#eaf3fa;} .section{margin-bottom:20px;}</style>"
             + "</head><body>"

@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class EmailServico {
 
-    public static void enviarEmail(String nome, String email, String mensagem, String caminhoPdf) {
+    public static void enviarEmail(String nome, String email, String mensagem, String caminhoAnexo) {
         ConfiguracaoSistema config = ConfiguracaoSistema.getInstance();
         final String remetente = config.getEmailRemetente();
         final String senha = config.getEmailSenha();
@@ -46,14 +46,14 @@ public class EmailServico {
             multipart.addBodyPart(textoBodyPart);
 
             // Anexo PDF
-            if (caminhoPdf != null && !caminhoPdf.isEmpty()) {
+            if (caminhoAnexo != null && !caminhoAnexo.isEmpty()) {
                 try {
                     MimeBodyPart anexoBodyPart = new MimeBodyPart();
-                    anexoBodyPart.attachFile(caminhoPdf);
+                    anexoBodyPart.attachFile(caminhoAnexo);
                     multipart.addBodyPart(anexoBodyPart);
                 } catch (java.io.IOException ioe) {
                     ioe.printStackTrace();
-                    System.out.println("Erro ao anexar PDF: " + caminhoPdf);
+                    System.out.println("Erro ao anexar PDF: " + caminhoAnexo);
                 }
             }
 

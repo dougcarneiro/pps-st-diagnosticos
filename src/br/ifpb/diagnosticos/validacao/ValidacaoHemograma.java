@@ -36,7 +36,7 @@ public class ValidacaoHemograma extends ValidadorBase {
         }
         
         if (validado) {
-            System.out.println(" Dados do exame sanguíneo validados com sucesso");
+            System.out.println("✅ Dados do exame sanguíneo validados com sucesso");
             return validarProximo(dados, tipoExame);
         }
 
