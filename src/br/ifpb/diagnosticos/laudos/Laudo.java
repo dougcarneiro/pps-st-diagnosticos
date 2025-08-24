@@ -1,9 +1,13 @@
+
 package br.ifpb.diagnosticos.laudos;
 
 import br.ifpb.diagnosticos.exames.Exame;
 import br.ifpb.diagnosticos.laudos.formatos.FormatoLaudo;
+import br.ifpb.diagnosticos.laudos.formatos.PDF;
+import br.ifpb.diagnosticos.laudos.formatos.HTML;
 import br.ifpb.diagnosticos.validacao.Validador;
 import br.ifpb.diagnosticos.notificacao.Observador;
+import br.ifpb.diagnosticos.notificacao.EmailNotificador;
 import br.ifpb.diagnosticos.utils.FormatadorTexto;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,11 +82,11 @@ public abstract class Laudo {
         String nomeExame = exame.getClass().getSimpleName();
         String nomePaciente = exame.getPaciente().getNome().replaceAll("\\s+", "_");
         String mensagemEmail;
-        if (formato instanceof br.ifpb.diagnosticos.laudos.formatos.PDF) {
-            caminhoAnexo = ((br.ifpb.diagnosticos.laudos.formatos.PDF)formato).gerarPDF(conteudo.toString(), nomeExame, nomePaciente);
+        if (formato instanceof PDF) {
+            caminhoAnexo = ((PDF)formato).gerarPDF(conteudo.toString(), nomeExame, nomePaciente);
             mensagemEmail = "Laudo gerado para paciente: " + exame.getPaciente().getNome();
-        } else if (formato instanceof br.ifpb.diagnosticos.laudos.formatos.HTML) {
-            caminhoAnexo = ((br.ifpb.diagnosticos.laudos.formatos.HTML)formato).gerarHTML(conteudo.toString(), nomeExame, nomePaciente);
+        } else if (formato instanceof HTML) {
+            caminhoAnexo = ((HTML)formato).gerarHTML(conteudo.toString(), nomeExame, nomePaciente);
             mensagemEmail = "Laudo gerado para paciente: " + exame.getPaciente().getNome();
         } else {
             // Formato texto: envia o laudo no corpo do e-mail
@@ -91,8 +95,8 @@ public abstract class Laudo {
 
         // Notificar observadores
         for (Observador observador : observadores) {
-            if (observador instanceof br.ifpb.diagnosticos.notificacao.EmailNotificador) {
-                ((br.ifpb.diagnosticos.notificacao.EmailNotificador)observador)
+            if (observador instanceof EmailNotificador) {
+                ((EmailNotificador)observador)
                     .atualizar(exame.getPaciente().getNome(), mensagemEmail, caminhoAnexo);
             } else {
                 observador.atualizar(exame.getPaciente().getNome(), mensagemEmail);
