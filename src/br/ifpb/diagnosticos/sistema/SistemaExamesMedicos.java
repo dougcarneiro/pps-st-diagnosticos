@@ -119,6 +119,15 @@ public class SistemaExamesMedicos {
         
         System.out.println("\n4. GERAÇÃO DE LAUDOS (Bridge + Memento + Observer)");
         System.out.println("==================================================");
+    // Registrar observações persistentes ANTES de gerar cada laudo
+    laboratorio.adicionarObservacaoExame(exame1, "Coleta realizada sem intercorrências.");
+    laboratorio.adicionarObservacaoExame(exame1, "Paciente em jejum adequado (8h).");
+    laboratorio.adicionarObservacaoExame(exame2, "Paciente ansioso, exame tolerado.");
+    laboratorio.adicionarObservacaoExame(exame2, "Sequências adicionais realizadas com contraste.");
+    laboratorio.adicionarObservacaoExame(exame3, "Boa janela acústica, visualização clara das estruturas.");
+    laboratorio.adicionarObservacaoExame(exameGlicemia, "Monitorar glicemia em 6 meses.");
+    laboratorio.adicionarObservacaoExame(exameMultiplo1, "Reavaliar perfil lipídico em 3 meses.");
+    laboratorio.adicionarObservacaoExame(exameCompleto, "Solicitar avaliação clínica detalhada se sintomas persistirem.");
         
         // Gerar laudos com diferentes formatos
         System.out.println("\n--- Laudo de Hemograma (PDF) ---");

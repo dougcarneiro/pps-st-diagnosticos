@@ -44,6 +44,8 @@ public class LaboratorioFacade {
     private Map<String, CriadorExame> criadores;
     private List<Exame> examesProcessados; // Lista para armazenar exames processados
     private List<Medico> medicosDisponiveis; // Lista de médicos disponíveis
+    // Observações persistentes associadas ao código do exame
+    private final Map<Integer, List<String>> observacoesPorExame = new HashMap<>();
     
     public LaboratorioFacade() {
         this.filaExames = new FilaPrioridadeExames();
@@ -220,6 +222,14 @@ public class LaboratorioFacade {
                 return null;
         }
         
+        // Reaplicar observações persistentes antes de gerar o laudo
+        List<String> obs = observacoesPorExame.get(exame.getCodigo());
+        if (obs != null) {
+            for (String o : obs) {
+                laudo.adicionarObservacao(o);
+            }
+        }
+
         // Configurar notificações (Observer)
         laudo.adicionarObservador(new EmailNotificador(exame.getPaciente().getEmail()));
         laudo.adicionarObservador(new SmsNotificador("(11) 99999-9999"));
@@ -233,6 +243,18 @@ public class LaboratorioFacade {
         }
         
         return laudo.gerarLaudo();
+    }
+
+    // --- Observações persistentes ---
+    public void adicionarObservacaoExame(Exame exame, String texto) {
+        if (exame == null || texto == null || texto.isBlank()) return;
+        observacoesPorExame
+            .computeIfAbsent(exame.getCodigo(), k -> new ArrayList<>())
+            .add(texto.trim());
+    }
+
+    public List<String> getObservacoesExame(Exame exame) {
+        return observacoesPorExame.getOrDefault(exame.getCodigo(), List.of());
     }
 
     private Validador criarCadeiaValidacao() {

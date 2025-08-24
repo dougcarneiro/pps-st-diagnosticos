@@ -36,7 +36,12 @@ public class PDF implements FormatoLaudo {
             contentStream.newLineAtOffset(50, 700);
             String[] linhas = conteudo.split("\n");
             for (String linha : linhas) {
-                contentStream.showText(linha);
+                if (linha == null) linha = "";
+                // Remover CR (carriage return) que causa IllegalArgumentException em PDFBox
+                String limpa = linha.replace("\r", "");
+                // Evitar caracteres de controle não imprimíveis
+                limpa = limpa.replaceAll("[\u0000-\u001F]", "");
+                contentStream.showText(limpa);
                 contentStream.newLine();
             }
             contentStream.endText();
