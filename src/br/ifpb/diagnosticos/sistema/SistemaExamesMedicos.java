@@ -63,23 +63,23 @@ public class SistemaExamesMedicos {
         
         // Solicitar exames com diferentes prioridades e descontos
         Exame exame1 = laboratorio.solicitarExame(
-            paciente1, "HEMOGRAMA", Prioridade.ROTINA, 
+            paciente1, medicosCarregados.get(0), "HEMOGRAMA", Prioridade.ROTINA, 
             new DescontoConvenio(), 80.0
         );
         
         Exame exame2 = laboratorio.solicitarExame(
-            paciente2, "RESSONANCIA", Prioridade.URGENTE, 
+            paciente2, medicosCarregados.get(1), "RESSONANCIA", Prioridade.URGENTE, 
             new DescontoIdoso(), 800.0
         );
         
         Exame exame3 = laboratorio.solicitarExame(
-            paciente3, "ULTRASSONOGRAFIA", Prioridade.POUCO_URGENTE, 
+            paciente3, medicosCarregados.get(2), "ULTRASSONOGRAFIA", Prioridade.POUCO_URGENTE, 
             null, 150.0
         );
         
         // Outro exame para demonstrar fila
         laboratorio.solicitarExame(
-            paciente1, "RESSONANCIA", Prioridade.URGENTE, 
+            paciente1, medicosCarregados.get(0), "RESSONANCIA", Prioridade.URGENTE, 
             new DescontoConvenio(), 800.0
         );
         
@@ -88,19 +88,19 @@ public class SistemaExamesMedicos {
         
         // Exame com apenas um indicador - Glicemia
         Exame exameGlicemia = laboratorio.solicitarExame(
-            paciente1, "HEMOGRAMA", Prioridade.ROTINA, 
+            paciente1, medicosCarregados.get(0), "HEMOGRAMA", Prioridade.ROTINA, 
             new DescontoConvenio(), 60.0, new String[]{"GLICEMIA"}
         );
         
         // Exame com múltiplos indicadores - Colesterol + Creatinina
         Exame exameMultiplo1 = laboratorio.solicitarExame(
-            paciente2, "HEMOGRAMA", Prioridade.POUCO_URGENTE, 
+            paciente2, medicosCarregados.get(1), "HEMOGRAMA", Prioridade.POUCO_URGENTE, 
             new DescontoIdoso(), 120.0, new String[]{"COLESTEROL", "CREATININA"}
         );
         
         // Exame completo com todos os indicadores
         Exame exameCompleto = laboratorio.solicitarExame(
-            paciente3, "HEMOGRAMA", Prioridade.URGENTE, 
+            paciente3, medicosCarregados.get(2), "HEMOGRAMA", Prioridade.URGENTE, 
             null, 180.0, new String[]{"GLICEMIA", "COLESTEROL", "CREATININA"}
         );
         
@@ -119,40 +119,43 @@ public class SistemaExamesMedicos {
         
         System.out.println("\n4. GERAÇÃO DE LAUDOS (Bridge + Memento + Observer)");
         System.out.println("==================================================");
-    // Registrar observações persistentes ANTES de gerar cada laudo
-    laboratorio.adicionarObservacaoExame(exame1, "Coleta realizada sem intercorrências.");
-    laboratorio.adicionarObservacaoExame(exame1, "Paciente em jejum adequado (8h).");
-    laboratorio.adicionarObservacaoExame(exame2, "Paciente ansioso, exame tolerado.");
-    laboratorio.adicionarObservacaoExame(exame2, "Sequências adicionais realizadas com contraste.");
-    laboratorio.adicionarObservacaoExame(exame3, "Boa janela acústica, visualização clara das estruturas.");
-    laboratorio.adicionarObservacaoExame(exameGlicemia, "Monitorar glicemia em 6 meses.");
-    laboratorio.adicionarObservacaoExame(exameMultiplo1, "Reavaliar perfil lipídico em 3 meses.");
-    laboratorio.adicionarObservacaoExame(exameCompleto, "Solicitar avaliação clínica detalhada se sintomas persistirem.");
         
         // Gerar laudos com diferentes formatos
+        Laudo laudoHemograma = laboratorio.gerarLaudo(exame1, "PDF");
+        Laudo laudoRessonancia = laboratorio.gerarLaudo(exame2, "HTML");
+        Laudo laudoUltrassom = laboratorio.gerarLaudo(exame3, "TEXTO");
+        Laudo laudoGlicemia = laboratorio.gerarLaudo(exameGlicemia, "PDF");
+        Laudo laudoMultiplo = laboratorio.gerarLaudo(exameMultiplo1, "HTML");
+        Laudo laudoCompletoTxt = laboratorio.gerarLaudo(exameCompleto, "TEXTO");
+
+        // Registrar observações para cada laudo
+        laboratorio.adicionarObservacao(laudoHemograma, "Coleta realizada sem intercorrências.");
+        laboratorio.adicionarObservacao(laudoHemograma, "Paciente em jejum adequado (8h).");
+        laboratorio.adicionarObservacao(laudoRessonancia, "Paciente ansioso, exame tolerado.");
+        laboratorio.adicionarObservacao(laudoRessonancia, "Sequências adicionais realizadas com contraste.");
+        laboratorio.adicionarObservacao(laudoUltrassom, "Boa janela acústica, visualização clara das estruturas.");
+        laboratorio.adicionarObservacao(laudoGlicemia, "Monitorar glicemia em 6 meses.");
+        laboratorio.adicionarObservacao(laudoMultiplo, "Reavaliar perfil lipídico em 3 meses.");
+        laboratorio.adicionarObservacao(laudoCompletoTxt, "Solicitar avaliação clínica detalhada se sintomas persistirem.");
+
+
         System.out.println("\n--- Laudo de Hemograma (PDF) ---");
-        String laudoHemograma = laboratorio.gerarLaudo(exame1, "PDF");
-        System.out.println(laudoHemograma);
-        
+        System.out.println(laboratorio.gerarDadosLaudo(laudoHemograma));
+
         System.out.println("\n--- Laudo de Ressonância (HTML) ---");
-        String laudoRessonancia = laboratorio.gerarLaudo(exame2, "HTML");
-        System.out.println(laudoRessonancia);
-        
+        System.out.println(laboratorio.gerarDadosLaudo(laudoRessonancia));
+
         System.out.println("\n--- Laudo de Ultrassonografia (Texto) ---");
-        String laudoUltrassom = laboratorio.gerarLaudo(exame3, "TEXTO");
-        System.out.println(laudoUltrassom);
+        System.out.println(laboratorio.gerarDadosLaudo(laudoUltrassom));
         
         System.out.println("\n--- Laudo de Exame Sanguíneo com Glicemia (PDF) ---");
-        String laudoGlicemia = laboratorio.gerarLaudo(exameGlicemia, "PDF");
-        System.out.println(laudoGlicemia);
-        
+        System.out.println(laboratorio.gerarDadosLaudo(laudoGlicemia));
+
         System.out.println("\n--- Laudo de Exame Sanguíneo com Múltiplos Indicadores (HTML) ---");
-        String laudoMultiplo = laboratorio.gerarLaudo(exameMultiplo1, "HTML");
-        System.out.println(laudoMultiplo);
-        
+        System.out.println(laboratorio.gerarDadosLaudo(laudoMultiplo));
+
         System.out.println("\n--- Laudo de Exame Sanguíneo Completo (Texto) ---");
-        String laudoCompletoTxt = laboratorio.gerarLaudo(exameCompleto, "TEXTO");
-        System.out.println(laudoCompletoTxt);
+        System.out.println(laboratorio.gerarDadosLaudo(laudoCompletoTxt));
 
         System.out.println("\n6. DEMONSTRAÇÃO DE HISTÓRICO DE OBSERVAÇÕES EM LAUDOS (Memento Pattern)");
         System.out.println("========================================================================");
@@ -168,8 +171,8 @@ public class SistemaExamesMedicos {
         System.out.println("DADOS ORIGINAIS: " + exame1.getDados());
         exame1.setDados(dadosInvalidos);
         System.out.println("DADOS VAZIOS: " + exame1.getDados());
-        String laudoVazio = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laudoVazio);
+        Laudo laudoVazio = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laboratorio.gerarDadosLaudo(laudoVazio));
         
         System.out.println("\n--- Teste 2: Dados com valores inválidos ---");
         Map<String, Object> dadosGlicemiaInvalida = new HashMap<>();
@@ -181,9 +184,14 @@ public class SistemaExamesMedicos {
         
         exame1.setDados(dadosGlicemiaInvalida);
         System.out.println("DADOS COM GLICEMIA INVÁLIDA: " + exame1.getDados());
-        String laudoGlicemiaInvalida = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laudoGlicemiaInvalida);
-        
+        Laudo laudoGlicemiaInvalida = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laboratorio.gerarDadosLaudo(laudoGlicemiaInvalida));
+
+        Laudo laudoGlicemiaTexto = laboratorio.gerarLaudo(exame1, "TEXTO");
+        String dadosGlicemiaTexto = laboratorio.gerarDadosLaudo(laudoGlicemiaTexto);
+        System.out.println("RESULTADO: " + dadosGlicemiaTexto);
+
+
         System.out.println("\n--- Teste 3: Dados com colesterol inválido ---");
         Map<String, Object> dadosColesterolInvalido = new HashMap<>();
         Map<String, Object> colesterolInvalido = new HashMap<>();
@@ -192,9 +200,9 @@ public class SistemaExamesMedicos {
         
         exame1.setDados(dadosColesterolInvalido);
         System.out.println("DADOS COM COLESTEROL INVÁLIDO: " + exame1.getDados());
-        String laudoColesterolInvalido = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laudoColesterolInvalido);
-        
+        Laudo laudoColesterolInvalido = laboratorio.gerarLaudo(exame1, "TEXTO");
+        System.out.println("RESULTADO: " + laboratorio.gerarDadosLaudo(laudoColesterolInvalido));
+
         System.out.println("\n=== SISTEMA EXECUTADO COM SUCESSO! ===");
     }
     

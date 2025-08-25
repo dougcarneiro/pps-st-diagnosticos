@@ -19,22 +19,17 @@ import java.util.Map;
 public abstract class Laudo {
     protected FormatoLaudo formato;
     protected Exame exame;
-    protected Observacao observacao; // Originator
+    protected Observacao observacao;
     protected Validador validadorInicial;
     protected List<Observador> observadores;
-    // Histórico simples de textos (para exibição direta) e caretaker Memento
-    protected ArrayList<String> historicoObservacao;
-    protected HistoricoObservacao caretaker;
+    protected ArrayList<Observacao> historicoObservacao;
     
     public Laudo(FormatoLaudo formato, Exame exame) {
         this.formato = formato;
         this.exame = exame;
         this.observacao = new Observacao("");
         this.observadores = new ArrayList<>();
-    this.historicoObservacao = new ArrayList<>();
-    this.caretaker = new HistoricoObservacao();
-    // Salva estado inicial vazio
-    this.caretaker.salvar(this.observacao.criarMemento());
+        this.historicoObservacao = new ArrayList<>();
     }
     
     // Observer Pattern - adicionar observador
@@ -85,7 +80,7 @@ public abstract class Laudo {
         // Gerar arquivo e enviar como anexo se formato for PDF ou HTML
         String caminhoAnexo = null;
         String nomeExame = exame.getClass().getSimpleName();
-        String nomePaciente = exame.getPaciente().getNome().replaceAll("\\s+", "_");
+        String nomePaciente = exame.getPaciente().getNome().replaceAll("\\s+", " ");
         String mensagemEmail;
         if (formato instanceof PDF) {
             caminhoAnexo = ((PDF)formato).gerarPDF(conteudo.toString(), nomeExame, nomePaciente);
@@ -145,29 +140,7 @@ public abstract class Laudo {
     }
     
     protected String gerarObservacoes() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("OBSERVAÇÕES:\n");
-        if (!historicoObservacao.isEmpty()) {
-            for (int i = 0; i < historicoObservacao.size(); i++) {
-                String texto = historicoObservacao.get(i);
-                if (texto != null && !texto.isBlank()) {
-                    sb.append(String.format("[%02d] %s%n", i + 1, texto));
-                }
-            }
-            // Observação atual destacada (pode ser uma restauração)
-            if (observacao != null && observacao.getTexto() != null && !observacao.getTexto().isBlank()) {
-                sb.append("\nObservação atual: ").append(observacao.getTexto()).append("\n");
-            }
-        } else {
-            // Sem histórico mas pode haver texto atual
-            if (observacao != null && observacao.getTexto() != null && !observacao.getTexto().isBlank()) {
-                sb.append(observacao.getTexto()).append("\n");
-            } else {
-                sb.append("Nenhuma observação registrada.\n");
-            }
-        }
-        sb.append("\n");
-        return sb.toString();
+        return "OBSERVAÇÕES:\n" + observacao.getTexto() + "\n\n";
     }
     
     protected String gerarRodape() {
@@ -184,15 +157,20 @@ public abstract class Laudo {
             Object valor = entry.getValue();
             
             // Se o valor for um Map, formatá-lo de forma legível com quebras de linha
-            if (valor instanceof Map<?, ?>) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> mapaValor = (Map<String, Object>) valor;
-                dados.append(FormatadorTexto.formatarTitleCase(chave)).append(":\n");
-                for (Map.Entry<String, Object> entryInterna : mapaValor.entrySet()) {
-                    dados.append("  ").append(FormatadorTexto.formatarTitleCase(entryInterna.getKey()))
-                         .append(": ").append(entryInterna.getValue()).append("\n");
+            if (valor instanceof Map) {
+                try {
+                    Map<String, Object> mapaValor = (Map<String, Object>) valor;
+                    
+                    dados.append(FormatadorTexto.formatarTitleCase(chave)).append(":\n");
+                    for (Map.Entry<String, Object> entryInterna : mapaValor.entrySet()) {
+                        dados.append("  ").append(FormatadorTexto.formatarTitleCase(entryInterna.getKey()))
+                             .append(": ").append(entryInterna.getValue()).append("\n");
+                    }
+                    dados.append("\n");
+                } catch (ClassCastException e) {
+                    // Em caso de erro no cast, usar toString padrão
+                    dados.append(FormatadorTexto.formatarTitleCase(chave)).append(": ").append(valor).append("\n");
                 }
-                dados.append("\n");
             } else {
                 // Para valores simples, imprimir diretamente
                 dados.append(FormatadorTexto.formatarTitleCase(chave)).append(": ").append(valor).append("\n");
@@ -203,23 +181,21 @@ public abstract class Laudo {
     
     // Métodos para gerenciar histórico de observações (Memento Pattern)
     public void adicionarObservacao(String textoObservacao) {
-        if (textoObservacao == null || textoObservacao.isBlank()) return;
-        // Atualiza originator
-        observacao.setTexto(textoObservacao.trim());
-        // Salva memento
-        caretaker.salvar(observacao.criarMemento());
-        // Armazena para listagem simples
-        historicoObservacao.add(observacao.getTexto());
+        // Criar nova observação e adicionar ao histórico
+        Observacao novaObservacao = new Observacao(textoObservacao);
+        historicoObservacao.add(novaObservacao);
+        // Atualizar observação atual
+        observacao.setTexto(textoObservacao);
     }
     
     public void restaurarObservacao(int indice) {
-        ObservacaoMemento m = caretaker.restaurar(indice + 1); // +1 pois índice 0 é inicial vazio
-        if (m != null) {
-            observacao.restaurar(m);
+        if (indice >= 0 && indice < historicoObservacao.size()) {
+            Observacao observacaoHistorica = historicoObservacao.get(indice);
+            observacao.setTexto(observacaoHistorica.getTexto());
         }
     }
     
-    public ArrayList<String> getHistoricoObservacao() {
+    public ArrayList<Observacao> getHistoricoObservacao() {
         return historicoObservacao;
     }
     
@@ -229,11 +205,11 @@ public abstract class Laudo {
         System.out.println("Exame: " + exame.getTipoExame());
         System.out.println("Número: " + exame.getNumeroExame());
         
-    if (historicoObservacao.size() > 0) {
+        if (historicoObservacao.size() > 0) {
             System.out.println("\n--- Histórico Completo ---");
             for (int i = 0; i < historicoObservacao.size(); i++) {
-        String obs = historicoObservacao.get(i);
-        System.out.println("Estado " + (i + 1) + ": " + obs);
+                Observacao obs = historicoObservacao.get(i);
+                System.out.println("Estado " + (i + 1) + ": " + obs.getTexto());
             }
             
             System.out.println("\n--- Navegação no Histórico ---");

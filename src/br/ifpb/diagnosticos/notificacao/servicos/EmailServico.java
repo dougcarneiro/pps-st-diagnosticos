@@ -8,10 +8,16 @@ import java.util.Properties;
 public class EmailServico {
 
     public static void enviarEmail(String nome, String email, String mensagem, String caminhoAnexo) {
+
+        
         ConfiguracaoSistema config = ConfiguracaoSistema.getInstance();
         final String remetente = config.getEmailRemetente();
         final String senha = config.getEmailSenha();
-
+        
+        if (!config.isNotificacaoEmailAtiva()) {
+            System.out.println("📧 [Simulação] Email para " + nome + " (" + email + "): " + mensagem);
+            return;
+        }
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");

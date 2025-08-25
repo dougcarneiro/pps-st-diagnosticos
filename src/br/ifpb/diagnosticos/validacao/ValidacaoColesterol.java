@@ -19,22 +19,22 @@ public class ValidacaoColesterol extends ValidadorBase {
         if (dados.containsKey("colesterol")) {
             Object colesterolObj = dados.get("colesterol");
             if (!(colesterolObj instanceof HashMap)) {
-                System.out.println("❌ Erro: Dados de colesterol devem estar em formato HashMap");
+                System.out.println("Erro: Dados de colesterol devem estar em formato HashMap");
                 return false;
             } else {
                 Map<String, Object> colesterolMap = (Map<String, Object>) colesterolObj;
                 if (!colesterolMap.containsKey("total")) {
-                    System.out.println("❌ Erro: Valor de colesterol total não encontrado");
+                    System.out.println("Erro: Valor de colesterol total não encontrado");
                     return false;
                 } else {
                     Object valorObj = colesterolMap.get("total");
                     if (!(valorObj instanceof Number)) {
-                        System.out.println("❌ Erro: Valor de colesterol total deve ser numérico");
+                        System.out.println("Erro: Valor de colesterol total deve ser numérico");
                         return false;
                     } else {
                         double colesterol = ((Number) valorObj).doubleValue();
                         if (colesterol < 0 || colesterol > 600) {
-                            System.out.println("❌ Erro: Valor de colesterol total fora do range válido (0-600 mg/dL)");
+                            System.out.println("Erro: Valor de colesterol total fora do range válido (0-600 mg/dL)");
                             return false;
                         }
                     }

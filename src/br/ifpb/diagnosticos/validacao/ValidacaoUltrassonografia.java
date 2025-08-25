@@ -18,13 +18,13 @@ public class ValidacaoUltrassonografia extends ValidadorBase {
         
         // Validar se órgão está especificado
         if (!dados.containsKey("orgao")) {
-            System.out.println("❌ Erro: Órgão a ser examinado deve ser especificado");
+            System.out.println("Erro: Órgão a ser examinado deve ser especificado");
             return false;
         }
         
         String orgao = (String) dados.get("orgao");
         if (orgao == null || orgao.trim().isEmpty()) {
-            System.out.println("❌ Erro: Nome do órgão não pode estar vazio");
+            System.out.println("Erro: Nome do órgão não pode estar vazio");
             return false;
         }
         

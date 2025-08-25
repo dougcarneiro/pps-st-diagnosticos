@@ -19,22 +19,22 @@ public class ValidacaoCreatinina extends ValidadorBase {
         if (dados.containsKey("creatinina")) {
             Object creatininaObj = dados.get("creatinina");
             if (!(creatininaObj instanceof HashMap)) {
-                System.out.println("❌ Erro: Dados de creatinina devem estar em formato HashMap");
+                System.out.println("Erro: Dados de creatinina devem estar em formato HashMap");
                 return false;
             } else {
                 Map<String, Object> creatininaMap = (Map<String, Object>) creatininaObj;
                 if (!creatininaMap.containsKey("valor")) {
-                    System.out.println("❌ Erro: Valor de creatinina não encontrado");
+                    System.out.println("Erro: Valor de creatinina não encontrado");
                     return false;
                 } else {
                     Object valorObj = creatininaMap.get("valor");
                     if (!(valorObj instanceof Number)) {
-                        System.out.println("❌ Erro: Valor de creatinina deve ser numérico");
+                        System.out.println("Erro: Valor de creatinina deve ser numérico");
                         return false;
                     } else {
                         double creatinina = ((Number) valorObj).doubleValue();
                         if (creatinina < 0 || creatinina > 10) {
-                            System.out.println("❌ Erro: Valor de creatinina fora do range válido (0-10 mg/dL)");
+                            System.out.println("Erro: Valor de creatinina fora do range válido (0-10 mg/dL)");
                             return false;
                         }
                     }

@@ -19,22 +19,22 @@ public class ValidacaoGlicemia extends ValidadorBase {
         if (dados.containsKey("glicemia")) {
             Object glicemiaObj = dados.get("glicemia");
             if (!(glicemiaObj instanceof HashMap)) {
-                System.out.println("❌ Erro: Dados de glicemia devem estar em formato HashMap");
+                System.out.println("Erro: Dados de glicemia devem estar em formato HashMap");
                 return false;
             } else {
                 Map<String, Object> glicemiaMap = (Map<String, Object>) glicemiaObj;
                 if (!glicemiaMap.containsKey("valor")) {
-                    System.out.println("❌ Erro: Valor de glicemia não encontrado");
+                    System.out.println("Erro: Valor de glicemia não encontrado");
                     return false;
                 } else {
                     Object valorObj = glicemiaMap.get("valor");
                     if (!(valorObj instanceof Number)) {
-                        System.out.println("❌ Erro: Valor de glicemia deve ser numérico");
+                        System.out.println("Erro: Valor de glicemia deve ser numérico");
                         return false;
                     } else {
                         double glicemia = ((Number) valorObj).doubleValue();
                         if (glicemia < 0 || glicemia > 500) {
-                            System.out.println("❌ Erro: Valor de glicemia fora do range válido (0-500 mg/dL)");
+                            System.out.println("Erro: Valor de glicemia fora do range válido (0-500 mg/dL)");
                             return false;
                         }
                     }

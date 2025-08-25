@@ -153,4 +153,8 @@ public class ConfiguracaoSistema {
     public boolean isNotificacaoWhatsAppAtiva() {
         return getBoolean("notificacao.whatsapp.ativo", true);
     }
+
+    public boolean isNotificacaoEmailAtivo() {
+        return getBoolean("notificacao.email.ativo", true);
+    }
 }

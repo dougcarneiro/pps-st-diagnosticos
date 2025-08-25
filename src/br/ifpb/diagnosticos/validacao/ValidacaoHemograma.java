@@ -18,7 +18,7 @@ public class ValidacaoHemograma extends ValidadorBase {
         
         // Validar dados básicos
         if (dados == null || dados.isEmpty()) {
-            System.out.println("❌ Erro: Nenhum dado fornecido para o exame sanguíneo");
+            System.out.println("Erro: Nenhum dado fornecido para o exame sanguíneo");
             return false;
         }
         
@@ -31,7 +31,7 @@ public class ValidacaoHemograma extends ValidadorBase {
                               dados.containsKey("leucocitos");
         
         if (!temIndicador) {
-            System.out.println("❌ Erro: Nenhum indicador válido encontrado no exame sanguíneo");
+            System.out.println("Erro: Nenhum indicador válido encontrado no exame sanguíneo");
             validado = false;
         }
         

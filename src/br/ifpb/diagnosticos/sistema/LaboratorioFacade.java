@@ -44,8 +44,6 @@ public class LaboratorioFacade {
     private Map<String, CriadorExame> criadores;
     private List<Exame> examesProcessados; // Lista para armazenar exames processados
     private List<Medico> medicosDisponiveis; // Lista de médicos disponíveis
-    // Observações persistentes associadas ao código do exame
-    private final Map<Integer, List<String>> observacoesPorExame = new HashMap<>();
     
     public LaboratorioFacade() {
         this.filaExames = new FilaPrioridadeExames();
@@ -66,47 +64,12 @@ public class LaboratorioFacade {
         this.medicosDisponiveis = medicos;
     }
     
-    /**
-     * Seleciona um médico baseado no tipo de exame
-     */
-    private Medico selecionarMedicoParaExame(String tipoExame) {
-        if (medicosDisponiveis.isEmpty()) {
-            return null;
-        }
-        
-        // Lógica para selecionar médico baseado no tipo de exame
-        for (Medico medico : medicosDisponiveis) {
-            switch (tipoExame.toUpperCase()) {
-                case "HEMOGRAMA":
-                    if (medico.getEspecialidade().contains("Hematologista") || 
-                        medico.getEspecialidade().contains("Clínico Geral")) {
-                        return medico;
-                    }
-                    break;
-                case "RESSONANCIA":
-                    if (medico.getEspecialidade().contains("Radiologista")) {
-                        return medico;
-                    }
-                    break;
-                case "ULTRASSONOGRAFIA":
-                    if (medico.getEspecialidade().contains("Ultrassonografista") ||
-                        medico.getEspecialidade().contains("Radiologista")) {
-                        return medico;
-                    }
-                    break;
-            }
-        }
-        
-        // Se não encontrar especialista, retorna o primeiro médico disponível
-        return medicosDisponiveis.get(0);
-    }
-    
-    public Exame solicitarExame(Paciente paciente, String tipoExame, 
+    public Exame solicitarExame(Paciente paciente, Medico medico, String tipoExame, 
                                Prioridade prioridade, DescontoStrategy desconto, double valor) {
-        return solicitarExame(paciente, tipoExame, prioridade, desconto, valor, null);
+        return solicitarExame(paciente, medico, tipoExame, prioridade, desconto, valor, null);
     }
     
-    public Exame solicitarExame(Paciente paciente, String tipoExame, 
+    public Exame solicitarExame(Paciente paciente, Medico medico, String tipoExame, 
                                Prioridade prioridade, DescontoStrategy desconto, double valor, String[] indicadores) {
         
         Exame exame;
@@ -156,12 +119,8 @@ public class LaboratorioFacade {
             System.out.println("Exame " + tipoExame + " solicitado para " + paciente.getNome());
         }
         
-        // Associar médico solicitante
-        String tipoExameParaMedico = (indicadores != null && indicadores.length > 0) ? "HEMOGRAMA" : tipoExame;
-        Medico medicoSolicitante = selecionarMedicoParaExame(tipoExameParaMedico);
-        if (medicoSolicitante != null) {
-            exame.setMedicoSolicitante(medicoSolicitante);
-        }
+        exame.setMedicoSolicitante(medico);
+        
         
         // Aplicar desconto se fornecido
         if (desconto != null) {
@@ -187,7 +146,7 @@ public class LaboratorioFacade {
         }
     }
     
-    public String gerarLaudo(Exame exame, String formato) {
+    public Laudo gerarLaudo(Exame exame, String formato) {
         
         // Escolher formato
         FormatoLaudo formatoLaudo;
@@ -222,14 +181,6 @@ public class LaboratorioFacade {
                 return null;
         }
         
-        // Reaplicar observações persistentes antes de gerar o laudo
-        List<String> obs = observacoesPorExame.get(exame.getCodigo());
-        if (obs != null) {
-            for (String o : obs) {
-                laudo.adicionarObservacao(o);
-            }
-        }
-
         // Configurar notificações (Observer)
         laudo.adicionarObservador(new EmailNotificador(exame.getPaciente().getEmail()));
         laudo.adicionarObservador(new SmsNotificador("(11) 99999-9999"));
@@ -239,22 +190,10 @@ public class LaboratorioFacade {
         
         // Validar dados antes de gerar laudo
         if (validador != null && !validador.validar(exame.getDados(), exame.getTipoExame())) {
-            return "Erro na validação dos dados do exame";
+            return null;
         }
         
-        return laudo.gerarLaudo();
-    }
-
-    // --- Observações persistentes ---
-    public void adicionarObservacaoExame(Exame exame, String texto) {
-        if (exame == null || texto == null || texto.isBlank()) return;
-        observacoesPorExame
-            .computeIfAbsent(exame.getCodigo(), k -> new ArrayList<>())
-            .add(texto.trim());
-    }
-
-    public List<String> getObservacoesExame(Exame exame) {
-        return observacoesPorExame.getOrDefault(exame.getCodigo(), List.of());
+        return laudo;
     }
 
     private Validador criarCadeiaValidacao() {
@@ -293,5 +232,16 @@ public class LaboratorioFacade {
     
     public List<Exame> getExamesProcessados() {
         return new ArrayList<>(examesProcessados);
+    }
+
+    public void adicionarObservacao(Laudo laudo, String texto) {
+        laudo.adicionarObservacao(texto);
+    }
+
+    public String gerarDadosLaudo(Laudo laudo) {
+        if (laudo == null) {
+            return "Laudo não disponível";
+        }
+        return laudo.gerarLaudo();
     }
 }

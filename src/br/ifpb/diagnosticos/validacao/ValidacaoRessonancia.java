@@ -18,25 +18,25 @@ public class ValidacaoRessonancia extends ValidadorBase {
         
         // Validar se região está especificada
         if (!dados.containsKey("regiao")) {
-            System.out.println("❌ Erro: Região a ser examinada deve ser especificada");
+            System.out.println("Erro: Região a ser examinada deve ser especificada");
             return false;
         }
         
         String regiao = (String) dados.get("regiao");
         if (regiao == null || regiao.trim().isEmpty()) {
-            System.out.println("❌ Erro: Nome da região não pode estar vazio");
+            System.out.println("Erro: Nome da região não pode estar vazio");
             return false;
         }
         
         // Validar se sequências estão especificadas
         if (!dados.containsKey("sequencias")) {
-            System.out.println("❌ Erro: Sequências de RM devem ser especificadas");
+            System.out.println("Erro: Sequências de RM devem ser especificadas");
             return false;
         }
         
         String sequencias = (String) dados.get("sequencias");
         if (sequencias == null || sequencias.trim().isEmpty()) {
-            System.out.println("❌ Erro: Sequências não podem estar vazias");
+            System.out.println("Erro: Sequências não podem estar vazias");
             return false;
         }
         
