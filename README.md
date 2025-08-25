@@ -33,7 +33,7 @@ A arquitetura do sistema foi construída com base em diversos padrões de projet
 | R5        | Validação extensível de exames                                          | Chain of Responsibility     |
 | R6        | Notificação ao paciente por e-mail (e futuramente SMS, Telegram)       | Observer                    |
 | R7        | Aplicação de políticas de desconto (convênio, idoso, etc.)             | Strategy                    |
-| R8        | Priorização de laudos usando lista de prioridade (URGENTE, POUCO URGENTE, ROTINA) | Priority Queue |
+| R8        | Priorização de laudos usando lista de prioridade (URGENTE, POUCO URGENTE, ROTINA) | Priority Queue(Estrutura de Dados) |
 | R9        | Programa principal simulando execução e atendimento dos requisitos     | Facade                      |
 | R10       | Controle de versões das observações médicas                            | Memento                     |
 
