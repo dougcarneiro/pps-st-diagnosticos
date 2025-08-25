@@ -5,12 +5,10 @@ JAVA_SRC_DIR = src
 BUILD_DIR = build
 LIB_DIR = lib
 MAIN_CLASS = br.ifpb.diagnosticos.sistema.SistemaExamesMedicos
-DEMO_CLASS = br.ifpb.diagnosticos.sistema.DemoConfiguracaoSistema
 JAVA_FILES = $(shell find $(JAVA_SRC_DIR) -name "*.java")
-SCRIPTS_DIR = scripts
 CLASSPATH = $(BUILD_DIR):$(LIB_DIR)/*
 
-.PHONY: all clean compile run demo check setup help test
+.PHONY: all clean compile run check help clean-output
 
 # Target padrão
 all: compile
@@ -27,14 +25,6 @@ check:
 		exit 1; \
 	fi
 	@echo " Java encontrado: $$(java -version 2>&1 | head -n 1)"
-
-# Setup inicial do projeto
-setup: check
-	@echo "📁 Criando estrutura de diretórios..."
-	@mkdir -p $(BUILD_DIR)
-	@mkdir -p dados
-	@mkdir -p config
-	@echo " Estrutura criada com sucesso!"
 
 # Compilar o projeto
 compile: check setup
@@ -60,20 +50,6 @@ run: compile
 	@echo ""
 	@java -cp "$(CLASSPATH)" $(MAIN_CLASS)
 
-# Executar demonstração de configuração
-demo: compile
-	@echo ""
-	@echo "🎯 Executando Demonstração de Configuração..."
-	@echo "=============================================="
-	@echo ""
-	@java -cp "$(CLASSPATH)" $(DEMO_CLASS)
-
-# Executar ambos os programas
-test: run demo
-
-# Compilar e executar (equivalente ao executar.sh)
-start: compile run
-
 # Limpar arquivos compilados
 clean:
 	@echo "🧹 Limpando arquivos compilados..."
@@ -81,11 +57,16 @@ clean:
 	@rm -f sources.tmp
 	@echo " Limpeza concluída!"
 
-# Limpar tudo (incluindo configurações)
-clean-all: clean
-	@echo "🧹 Limpando configurações e dados..."
-	@rm -rf config/*.properties
-	@echo " Limpeza completa concluída!"
+# Limpar pasta output (preservando .output)
+clean-output:
+	@echo "🧹 Limpando pasta output (preservando .output)..."
+	@if [ -d output ]; then \
+		find output -type f ! -name ".output" -delete; \
+		find output -type d ! -path "output" -delete; \
+		echo " Pasta output limpa com sucesso!"; \
+	else \
+		echo " Pasta output não encontrada"; \
+	fi
 
 # Mostrar informações do projeto
 info:
@@ -95,7 +76,6 @@ info:
 	@echo "Diretório Source: $(JAVA_SRC_DIR)"
 	@echo "Diretório Build: $(BUILD_DIR)"
 	@echo "Classe Principal: $(MAIN_CLASS)"
-	@echo "Classe Demo: $(DEMO_CLASS)"
 	@echo ""
 	@if [ -d $(BUILD_DIR) ]; then \
 		echo " Projeto compilado"; \
@@ -109,21 +89,16 @@ help:
 	@echo "================================================"
 	@echo ""
 	@echo "Comandos disponíveis:"
-	@echo "  make ou make all      - Compila o projeto"
+	@echo "  make ou make all    - Compila o projeto"
 	@echo "  make compile        - Compila o sistema"
 	@echo "  make run            - Compila e executa o sistema principal"
-	@echo "  make demo           - Compila e executa a demonstração"
-	@echo "  make start          - Equivalente ao executar.sh"
-	@echo "  make test           - Executa sistema principal + demo"
 	@echo "  make clean          - Remove arquivos compilados"
-	@echo "  make clean-all      - Remove tudo (build + config)"
+	@echo "  make clean-output   - Limpa pasta output (preserva .output)"
 	@echo "  make info           - Mostra informações do projeto"
 	@echo "  make check          - Verifica ambiente Java"
-	@echo "  make setup          - Cria estrutura de diretórios"
 	@echo "  make help           - Mostra esta ajuda"
 	@echo ""
 	@echo "Exemplos de uso:"
 	@echo "  make run            - Execução rápida do sistema"
-	@echo "  make demo           - Ver demonstração de configuração"
 	@echo "  make clean run      - Limpar e recompilar"
 	@echo ""

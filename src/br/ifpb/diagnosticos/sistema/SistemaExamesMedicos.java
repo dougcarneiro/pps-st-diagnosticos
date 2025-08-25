@@ -140,22 +140,22 @@ public class SistemaExamesMedicos {
 
 
         System.out.println("\n--- Laudo de Hemograma (PDF) ---");
-        System.out.println(laboratorio.gerarDadosLaudo(laudoHemograma));
+        System.out.println(laboratorio.emitirLaudo(laudoHemograma));
 
         System.out.println("\n--- Laudo de Ressonância (HTML) ---");
-        System.out.println(laboratorio.gerarDadosLaudo(laudoRessonancia));
+        System.out.println(laboratorio.emitirLaudo(laudoRessonancia));
 
         System.out.println("\n--- Laudo de Ultrassonografia (Texto) ---");
-        System.out.println(laboratorio.gerarDadosLaudo(laudoUltrassom));
+        System.out.println(laboratorio.emitirLaudo(laudoUltrassom));
         
         System.out.println("\n--- Laudo de Exame Sanguíneo com Glicemia (PDF) ---");
-        System.out.println(laboratorio.gerarDadosLaudo(laudoGlicemia));
+        System.out.println(laboratorio.emitirLaudo(laudoGlicemia));
 
         System.out.println("\n--- Laudo de Exame Sanguíneo com Múltiplos Indicadores (HTML) ---");
-        System.out.println(laboratorio.gerarDadosLaudo(laudoMultiplo));
+        System.out.println(laboratorio.emitirLaudo(laudoMultiplo));
 
         System.out.println("\n--- Laudo de Exame Sanguíneo Completo (Texto) ---");
-        System.out.println(laboratorio.gerarDadosLaudo(laudoCompletoTxt));
+        System.out.println(laboratorio.emitirLaudo(laudoCompletoTxt));
 
         System.out.println("\n6. DEMONSTRAÇÃO DE HISTÓRICO DE OBSERVAÇÕES EM LAUDOS (Memento Pattern)");
         System.out.println("========================================================================");
@@ -172,7 +172,7 @@ public class SistemaExamesMedicos {
         exame1.setDados(dadosInvalidos);
         System.out.println("DADOS VAZIOS: " + exame1.getDados());
         Laudo laudoVazio = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laboratorio.gerarDadosLaudo(laudoVazio));
+        System.out.println("RESULTADO: " + laboratorio.emitirLaudo(laudoVazio));
         
         System.out.println("\n--- Teste 2: Dados com valores inválidos ---");
         Map<String, Object> dadosGlicemiaInvalida = new HashMap<>();
@@ -185,10 +185,10 @@ public class SistemaExamesMedicos {
         exame1.setDados(dadosGlicemiaInvalida);
         System.out.println("DADOS COM GLICEMIA INVÁLIDA: " + exame1.getDados());
         Laudo laudoGlicemiaInvalida = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laboratorio.gerarDadosLaudo(laudoGlicemiaInvalida));
+        System.out.println("RESULTADO: " + laboratorio.emitirLaudo(laudoGlicemiaInvalida));
 
         Laudo laudoGlicemiaTexto = laboratorio.gerarLaudo(exame1, "TEXTO");
-        String dadosGlicemiaTexto = laboratorio.gerarDadosLaudo(laudoGlicemiaTexto);
+        String dadosGlicemiaTexto = laboratorio.emitirLaudo(laudoGlicemiaTexto);
         System.out.println("RESULTADO: " + dadosGlicemiaTexto);
 
 
@@ -201,7 +201,7 @@ public class SistemaExamesMedicos {
         exame1.setDados(dadosColesterolInvalido);
         System.out.println("DADOS COM COLESTEROL INVÁLIDO: " + exame1.getDados());
         Laudo laudoColesterolInvalido = laboratorio.gerarLaudo(exame1, "TEXTO");
-        System.out.println("RESULTADO: " + laboratorio.gerarDadosLaudo(laudoColesterolInvalido));
+        System.out.println("RESULTADO: " + laboratorio.emitirLaudo(laudoColesterolInvalido));
 
         System.out.println("\n=== SISTEMA EXECUTADO COM SUCESSO! ===");
     }

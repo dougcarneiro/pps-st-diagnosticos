@@ -238,7 +238,7 @@ public class LaboratorioFacade {
         laudo.adicionarObservacao(texto);
     }
 
-    public String gerarDadosLaudo(Laudo laudo) {
+    public String emitirLaudo(Laudo laudo) {
         if (laudo == null) {
             return "Laudo não disponível";
         }
