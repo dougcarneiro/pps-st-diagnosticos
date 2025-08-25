@@ -26,7 +26,7 @@ A arquitetura do sistema foi construída com base em diversos padrões de projet
 
 | Requisito | Descrição resumida                                                      | Padrão de Projeto Aplicado |
 |-----------|-------------------------------------------------------------------------|-----------------------------|
-| R1        | Carregar dados necessários a partir de arquivos CSV                    | Utility Class               |
+| R1        | Carregar dados necessários a partir de arquivos CSV                    | Utility Class(Utils)               |
 | R2        | Geração de número sequencial único para exames                         | Singleton                   |
 | R3        | Emitir laudos para exames: Sanguíneo, Raio-X e Ressonância Magnética  | Factory Method + Template Method + Decorator |
 | R4        | Geração de laudos em múltiplos formatos (texto, HTML, PDF, etc.)       | Bridge                      |
@@ -57,7 +57,7 @@ make help
 
 ## Requisito R1 - Carregar os dados necessários a partir de arquivos CSV
 
-**Padrão de Projeto Aplicado:** Utility Class
+Utility Class
 
 **Como será utilizado:**  
 A classe `CarregadorCSV` fornece métodos estáticos para carregar dados de pacientes, médicos solicitantes, médicos responsáveis pelo laudo e outros dados necessários a partir de arquivos CSV. Esta classe contém apenas métodos utilitários sem estado, seguindo o padrão de classe utilitária.
