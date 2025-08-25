@@ -81,4 +81,17 @@ public abstract class Exame {
     public Date getDataImplantacao() {
         return dataImplantacao;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder dados = new StringBuilder();
+        dados.append("Exame Código: ").append(codigo).append("\n");
+        dados.append("Paciente: ").append(paciente.getNome()).append("\n");
+        dados.append("Médico Solicitante: ").append(medicoSolicitante.getNome()).append("\n");
+        dados.append("Data de Implantação: ").append(dataImplantacao).append("\n");
+        dados.append("Tipo de Exame: ").append(tipoExame).append("\n");
+        dados.append("Valor: R$ ").append(String.format("%.2f", valor)).append("\n");
+    
+        return dados.toString();
+    }
 }

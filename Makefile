@@ -27,7 +27,7 @@ check:
 	@echo " Java encontrado: $$(java -version 2>&1 | head -n 1)"
 
 # Compilar o projeto
-compile: check setup
+compile: check
 	@echo "🔨 Compilando sistema completo..."
 	@echo "   Encontrados $$(echo $(JAVA_FILES) | wc -w) arquivos Java"
 	@find $(JAVA_SRC_DIR) -name "*.java" > sources.tmp

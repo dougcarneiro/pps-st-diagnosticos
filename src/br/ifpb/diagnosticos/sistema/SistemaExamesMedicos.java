@@ -224,7 +224,7 @@ public class SistemaExamesMedicos {
         System.out.println("\n--- Demonstração com Múltiplos Laudos ---");
 
         for (Exame exameDemo : exames) {
-            System.out.println("exame: " + exameDemo);
+            System.out.println(exameDemo);
 
             Laudo laudoDemo;
             switch (exameDemo.getTipoExame()) {
@@ -244,12 +244,12 @@ public class SistemaExamesMedicos {
             System.out.println("\n*** LAUDO " + (exameDemo.getCodigo()) + " - Paciente: " + exameDemo.getPaciente().getNome() + " ***");
 
             // Simular evolução específica para cada paciente
-            if (exameDemo.getCodigo() % 2 == 0) {
+            if (exameDemo.getCodigo() == 1) {
                 // Primeiro paciente - evolução positiva
                 laudoDemo.adicionarObservacao("Paciente apresenta sintomas iniciais");
                 laudoDemo.adicionarObservacao("Resultados mostram melhora significativa");
                 laudoDemo.adicionarObservacao("Quadro clínico estabilizado - alta médica");
-            } else {
+            } else if (exameDemo.getCodigo() == 2) {
                 // Segundo paciente - evolução mais detalhada
                 laudoDemo.adicionarObservacao("Paciente com histórico de complicações");
                 laudoDemo.adicionarObservacao("Necessário acompanhamento rigoroso");
